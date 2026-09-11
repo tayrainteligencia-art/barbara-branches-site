@@ -34,6 +34,16 @@ pela clínica antes da publicação. Enquanto isso, o site usa placeholders marc
 - [ ] Domínio definitivo do site (para metadata, Open Graph e `NEXT_PUBLIC_SITE_URL`)
 - [ ] Definir serviço de envio do formulário de contato (ex.: Resend, outro) e suas
       credenciais (nunca commitar a chave — usar variável de ambiente)
+- [ ] Ferramenta de mensuração de conversão (analytics/pixel) — nenhuma instalada;
+      depende de decisão sobre ferramenta + aviso de cookies/LGPD
+
+## Decisão sua — redesign de portfólio
+- [ ] Lighthouse Performance ficou em 74 (linha de base era 77). O motivo é o
+      preloader (~1,15s cobrindo a tela com o logo) atrasar o LCP do texto por
+      trás — é a revelação animada do logo já pedida no projeto original, dentro
+      do limite de 1,5s. Dá pra ganhar mais alguns pontos removendo ou encurtando
+      bastante o preloader, mas isso troca a entrada com marca por um score
+      melhor. Mantive o preloader como está; me avise se preferir o contrário.
 
 Sem esses dados, os textos e imagens correspondentes ficam marcados com `TODO` no
 código-fonte e devem ser preenchidos antes do lançamento.

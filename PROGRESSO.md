@@ -1,9 +1,26 @@
 # Progresso do projeto
 
 ## Redesign Portfólio (branch `redesign/portfolio`)
-Estado: Etapa 2 concluída (todos os componentes obrigatórios + opcionais
-aprovados). Próximo: Etapa 3 (auditoria de conversão, lint/build, validação de
-marco completa, Lighthouse comparado à linha de base).
+Estado: **Etapa 3 concluída — redesign pronto para revisão**, na branch
+`redesign/portfolio` (não mesclado na `main`).
+
+### Item 6 — Etapa 3 (final)
+- `AUDITORIA_CONVERSAO.md`: sem dados de tráfego ainda; achados por princípios
+  (ver arquivo) — nada bloqueante, 2 itens dependem de dados que faltam
+- Lint e build de produção sem erros; validação de marco final (375/768/1440,
+  claro/escuro, reduced-motion) sem erros de console/overflow/imagens quebradas
+- Lighthouse: baseline 77/96/100/100 → redesign final **74/97/100/100**
+  (performance) — caiu para 68 logo após o redesign (todo o JS das seções
+  carregava de uma vez), recuperado para 74 com `next/dynamic` nas seções
+  abaixo do Hero, no Footer, no Navbar e no parallax decorativo do Hero
+- Gap restante (74 vs. 77): o preloader ocupa a tela por ~1,15s (dentro do
+  limite de 1,5s do projeto original) e isso atrasa o LCP do texto por trás —
+  decisão registrada em PENDENCIAS.md para você validar
+- CTA do meio da página (previsto no plano) tinha ficado de fora — adicionado
+  nesta etapa
+- Não fiz deploy na Vercel — sem acesso à sua conta. Se o projeto já estiver
+  conectado ao GitHub, um preview da branch `redesign/portfolio` deve aparecer
+  automaticamente no seu painel Vercel
 
 ### Item 1 — tokens + next-themes + toggle
 - Tokens únicos background/foreground/accent-text/accent-solid nos 2 temas, contraste
