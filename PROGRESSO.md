@@ -1,9 +1,9 @@
 # Progresso do projeto
 
 ## Redesign Portfólio (branch `redesign/portfolio`)
-Estado: Etapa 2, item 5 em andamento. Feito: Sobre (text-generate-effect),
-Tratamentos (Focus Cards), Diferenciais (Sticky Scroll Reveal). Próximo:
-Estrutura/Galeria (Layout Grid).
+Estado: Etapa 2 concluída (todos os componentes obrigatórios + opcionais
+aprovados). Próximo: Etapa 3 (auditoria de conversão, lint/build, validação de
+marco completa, Lighthouse comparado à linha de base).
 
 ### Item 1 — tokens + next-themes + toggle
 - Tokens únicos background/foreground/accent-text/accent-solid nos 2 temas, contraste
@@ -43,6 +43,16 @@ Estrutura/Galeria (Layout Grid).
 - Diferenciais: Sticky Scroll Reveal original usava container com overflow interno
   (conflita com Lenis) — reescrito para rastrear o scroll da página; gradientes
   genéricos trocados por token accent-text
+- Estrutura: Layout Grid sem fotos reais — placeholders tracejados; virou modal de
+  verdade (Esc fecha, foco retorna ao card, botões em vez de divs)
+- Depoimentos: Animated Testimonials sem depoimentos/fotos reais — ícone de aspas +
+  "a confirmar"; removido @tabler/icons-react (não usado)
+- Opcionais: Container Text Flip (CTA final) e Stateful Button (form) corrigidos e
+  usados; Timeline e Noise Background (Aceternity) descartados — ver commit
+  "componentes opcionais" para o porquê de cada um
+- 4º bug de reduced-motion, categoria nova: Container Text Flip tinha `<div>` dentro
+  de `<p>` (HTML inválido, herdado do template original) causando hydration error
+  em todo carregamento — corrigido trocando a tag raiz para `<div>`
 
 ### Diagnóstico
 - Versões: next@16.3.5, react@19.2.8, tailwindcss@4.3.3, framer-motion@13.2.0,
