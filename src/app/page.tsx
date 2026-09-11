@@ -2,6 +2,7 @@ import { Hero } from "@/components/sections/hero";
 import { About } from "@/components/sections/about";
 import { Treatments } from "@/components/sections/treatments";
 import { Differentiators } from "@/components/sections/differentiators";
+import { CtaMid } from "@/components/sections/cta-mid";
 import { Professional } from "@/components/sections/professional";
 import { Gallery } from "@/components/sections/gallery";
 import { HowItWorks } from "@/components/sections/how-it-works";
@@ -38,6 +39,7 @@ export default function Home() {
       <About />
       <Treatments />
       <Differentiators />
+      <CtaMid />
       <Professional />
       <Gallery />
       <HowItWorks />
