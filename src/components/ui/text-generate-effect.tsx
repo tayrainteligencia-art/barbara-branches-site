@@ -10,6 +10,7 @@ export const TextGenerateEffect = ({
   filter = true,
   duration = 0.5,
   staggerDelay = 0.2,
+  play = true,
 }: {
   words: string;
   className?: string;
@@ -17,19 +18,21 @@ export const TextGenerateEffect = ({
   duration?: number;
   /** intervalo entre o início da animação de cada palavra */
   staggerDelay?: number;
+  /** false mantém o texto invisível (mas montado, sem CLS) até virar true */
+  play?: boolean;
 }) => {
   const [scope, animate] = useAnimate();
   const reducedMotion = useReducedMotion();
   const wordsArray = words.split(" ");
 
   useEffect(() => {
-    if (reducedMotion) return;
+    if (reducedMotion || !play) return;
     animate(
       "span",
       { opacity: 1, filter: filter ? "blur(0px)" : "none" },
       { duration, delay: stagger(staggerDelay) },
     );
-  }, [reducedMotion, duration, filter, staggerDelay, animate]);
+  }, [reducedMotion, play, duration, filter, staggerDelay, animate]);
 
   return (
     <motion.div ref={scope} className={cn("font-sans", className)}>

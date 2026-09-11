@@ -1,13 +1,17 @@
 "use client";
 
+import { useRef } from "react";
 import Image from "next/image";
-import { motion } from "motion/react";
+import { motion, useInView } from "motion/react";
 import { SplitReveal } from "@/components/split-reveal";
 import { SectionLabel } from "@/components/section-label";
+import { TextGenerateEffect } from "@/components/ui/text-generate-effect";
 import { useFadeUp } from "@/hooks/use-fade-up";
 
 export function About() {
   const fadeUp = useFadeUp();
+  const textRef = useRef<HTMLDivElement>(null);
+  const textInView = useInView(textRef, { once: true, amount: 0.5 });
 
   return (
     <section
@@ -24,19 +28,22 @@ export function About() {
             className="font-display text-3xl leading-[1.2] tracking-wide text-foreground sm:text-4xl lg:text-[2.75rem]"
           />
 
-          <motion.div {...fadeUp} className="mt-8 space-y-5">
-            <p className="max-w-xl text-balance font-sans text-base leading-relaxed text-foreground/80 sm:text-lg">
-              Acreditamos que a beleza verdadeira nasce do equilíbrio: entre
-              técnica e sensibilidade, entre resultado e naturalidade, entre
-              ciência e escuta. Cada atendimento começa antes do
-              procedimento — começa por entender você.
-            </p>
-            <p className="max-w-xl text-balance font-sans text-base leading-relaxed text-foreground/80 sm:text-lg">
-              Por isso unimos conhecimento técnico atualizado a um cuidado
-              próximo e humano, para que cada pessoa se sinta ouvida,
-              respeitada e segura em todas as etapas do seu tratamento.
-            </p>
-          </motion.div>
+          <div ref={textRef} className="mt-8 max-w-xl space-y-5">
+            <TextGenerateEffect
+              play={textInView}
+              duration={0.4}
+              staggerDelay={0.02}
+              className="text-balance text-base leading-relaxed text-foreground/80 sm:text-lg"
+              words="Acreditamos que a beleza verdadeira nasce do equilíbrio: entre técnica e sensibilidade, entre resultado e naturalidade, entre ciência e escuta. Cada atendimento começa antes do procedimento — começa por entender você."
+            />
+            <TextGenerateEffect
+              play={textInView}
+              duration={0.4}
+              staggerDelay={0.02}
+              className="text-balance text-base leading-relaxed text-foreground/80 sm:text-lg"
+              words="Por isso unimos conhecimento técnico atualizado a um cuidado próximo e humano, para que cada pessoa se sinta ouvida, respeitada e segura em todas as etapas do seu tratamento."
+            />
+          </div>
         </div>
 
         <motion.div
