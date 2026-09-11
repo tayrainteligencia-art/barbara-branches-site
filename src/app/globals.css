@@ -1,48 +1,49 @@
 @import "tailwindcss";
 
+/* next-themes usa classe .dark no <html>; redefine a variante dark do Tailwind v4 para reagir a ela (em vez de prefers-color-scheme). */
+@custom-variant dark (&:is(.dark *));
+
 :root {
-  /* Marca — ver BRAND_ANALYSIS.md */
-  --color-bronze: #b0824a;
-  --color-bronze-dark: #8c6635;
-  --color-bronze-light: #d4af7a;
+  /* Fundo único da página (ver PLANO_REDESIGN.md) */
+  --background: #fbf8f2;
+  --foreground: #2a2620;
+  /* bronze puro (#B0824A) falha AA em texto pequeno sobre --background claro */
+  --accent-text: #8c6635;
+  --accent-solid: #b0824a;
+  --accent-solid-foreground: #0e0c09;
+  --border: rgb(42 38 32 / 12%);
+}
 
-  --color-ink: #15130f;
-  --color-ink-soft: #2a2620;
-
-  --color-cream: #fbf8f2;
-  --color-cream-deep: #f2ead9;
-  --color-cream-line: #e4d7be;
-
-  --color-surface-dark: #0e0c09;
-  --color-surface-dark-2: #1c1710;
-
-  --background: var(--color-cream);
-  --foreground: var(--color-ink-soft);
+.dark {
+  --background: #0e0c09;
+  --foreground: #f2ead9;
+  --accent-text: #d4af7a;
+  --accent-solid: #b0824a;
+  --accent-solid-foreground: #0e0c09;
+  --border: rgb(242 234 217 / 12%);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-
-  --color-bronze: var(--color-bronze);
-  --color-bronze-dark: var(--color-bronze-dark);
-  --color-bronze-light: var(--color-bronze-light);
-  --color-ink: var(--color-ink);
-  --color-ink-soft: var(--color-ink-soft);
-  --color-cream: var(--color-cream);
-  --color-cream-deep: var(--color-cream-deep);
-  --color-cream-line: var(--color-cream-line);
-  --color-surface-dark: var(--color-surface-dark);
-  --color-surface-dark-2: var(--color-surface-dark-2);
+  --color-accent-text: var(--accent-text);
+  --color-accent-solid: var(--accent-solid);
+  --color-accent-solid-foreground: var(--accent-solid-foreground);
+  --color-border: var(--border);
 
   --font-display: var(--font-cinzel);
   --font-sans: var(--font-montserrat);
 }
 
-/* Site institucional: identidade visual fixa, não segue o tema do sistema. */
 body {
   background: var(--background);
   color: var(--foreground);
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
 }
 
 @media (prefers-reduced-motion: reduce) {

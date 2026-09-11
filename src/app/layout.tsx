@@ -5,6 +5,8 @@ import { WhatsAppButton } from "@/components/whatsapp-button";
 import { Footer } from "@/components/footer";
 import { Preloader } from "@/components/preloader";
 import { PreloaderProvider } from "@/lib/preloader-context";
+import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeToggle } from "@/components/theme-toggle";
 import "./globals.css";
 
 const cinzel = Cinzel({
@@ -48,17 +50,23 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="pt-BR"
+      suppressHydrationWarning
       className={`${cinzel.variable} ${montserrat.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-cream text-ink-soft font-sans">
-        <PreloaderProvider>
-          <Preloader />
-          <SmoothScrollProvider>
-            {children}
-            <Footer />
-          </SmoothScrollProvider>
-        </PreloaderProvider>
-        <WhatsAppButton />
+      <body className="min-h-full flex flex-col bg-background text-foreground font-sans">
+        <ThemeProvider>
+          <PreloaderProvider>
+            <Preloader />
+            <SmoothScrollProvider>
+              {children}
+              <Footer />
+            </SmoothScrollProvider>
+          </PreloaderProvider>
+          <WhatsAppButton />
+          <div className="fixed top-4 right-4 z-40">
+            <ThemeToggle />
+          </div>
+        </ThemeProvider>
       </body>
     </html>
   );
