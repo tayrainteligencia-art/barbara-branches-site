@@ -6,6 +6,7 @@ import { Professional } from "@/components/sections/professional";
 import { Gallery } from "@/components/sections/gallery";
 import { HowItWorks } from "@/components/sections/how-it-works";
 import { Testimonials } from "@/components/sections/testimonials";
+import { Faq } from "@/components/sections/faq";
 
 export default function Home() {
   return (
@@ -18,6 +19,7 @@ export default function Home() {
       <Gallery />
       <HowItWorks />
       <Testimonials />
+      <Faq />
     </main>
   );
 }
