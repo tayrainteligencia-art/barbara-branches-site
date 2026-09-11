@@ -1,12 +1,18 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { SplitReveal } from "@/components/split-reveal";
 import { TextGenerateEffect } from "@/components/ui/text-generate-effect";
-import { ParallaxHeroImages } from "@/components/ui/parallax-hero-images";
 import { usePreloaderReady } from "@/lib/preloader-context";
 import { useMagnetic } from "@/hooks/use-magnetic";
 import { getWhatsAppLink } from "@/lib/whatsapp";
 import { cn } from "@/lib/utils";
+
+// Puramente decorativo (oculto no mobile, opacidade baixa) — não faz parte
+// do conteúdo crítico do Hero, então não precisa bloquear o bundle inicial.
+const ParallaxHeroImages = dynamic(() =>
+  import("@/components/ui/parallax-hero-images").then((m) => m.ParallaxHeroImages),
+);
 
 export function Hero() {
   const ready = usePreloaderReady();
