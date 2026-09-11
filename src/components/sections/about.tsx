@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { SplitReveal } from "@/components/split-reveal";
 import { SectionLabel } from "@/components/section-label";
 import { useFadeUp } from "@/hooks/use-fade-up";

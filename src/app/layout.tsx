@@ -6,7 +6,7 @@ import { Footer } from "@/components/footer";
 import { Preloader } from "@/components/preloader";
 import { PreloaderProvider } from "@/lib/preloader-context";
 import { ThemeProvider } from "@/components/theme-provider";
-import { ThemeToggle } from "@/components/theme-toggle";
+import { Navbar } from "@/components/navbar";
 import "./globals.css";
 
 const cinzel = Cinzel({
@@ -57,15 +57,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <ThemeProvider>
           <PreloaderProvider>
             <Preloader />
+            <Navbar />
             <SmoothScrollProvider>
               {children}
               <Footer />
             </SmoothScrollProvider>
           </PreloaderProvider>
           <WhatsAppButton />
-          <div className="fixed top-4 right-4 z-40">
-            <ThemeToggle />
-          </div>
         </ThemeProvider>
       </body>
     </html>

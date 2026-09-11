@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { SplitReveal } from "@/components/split-reveal";
 import { ContactForm } from "@/components/contact-form";
 import { SectionLabel } from "@/components/section-label";
