@@ -1,8 +1,16 @@
 # Progresso do projeto
 
 ## Redesign Portfólio (branch `redesign/portfolio`)
-Estado: Etapa 0 (diagnóstico) concluída. Próximo passo: escrever PLANO_REDESIGN.md e
-aguardar aprovação.
+Estado: Etapa 2, item 1 concluído (tokens + next-themes + toggle). Próximo: item 2
+(fundo contínuo, remover cor por seção).
+
+### Item 1 — tokens + next-themes + toggle
+- Tokens únicos background/foreground/accent-text/accent-solid nos 2 temas, contraste
+  AA verificado (ver PLANO_REDESIGN.md)
+- Toggle com view-transition circular + fallback instantâneo; validado 375/768/1440,
+  claro/escuro, reduced-motion — sem erros de console
+- Tokens antigos (cream/ink/bronze/surface-dark) removidos do CSS — seções ainda os
+  referenciam até o item 2 (próximo commit corrige)
 
 ### Diagnóstico
 - Versões: next@16.3.5, react@19.2.8, tailwindcss@4.3.3, framer-motion@13.2.0,
