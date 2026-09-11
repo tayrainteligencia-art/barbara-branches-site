@@ -1,8 +1,8 @@
 # Progresso do projeto
 
 ## Redesign Portfólio (branch `redesign/portfolio`)
-Estado: Etapa 2, item 3 concluído (Navbar). Próximo: item 4 (Hero com
-parallax-hero-images + text-generate-effect) → validação de marco.
+Estado: Etapa 2, item 4 concluído (Hero) → validação de marco OK. Próximo: item 5
+(demais seções, uma por vez), começando por Sobre.
 
 ### Item 1 — tokens + next-themes + toggle
 - Tokens únicos background/foreground/accent-text/accent-solid nos 2 temas, contraste
@@ -25,6 +25,14 @@ parallax-hero-images + text-generate-effect) → validação de marco.
 - floating-navbar instalado e adaptado: tokens da marca, PT-BR, logo+toggle no pill,
   reduced-motion (duração 0)
 - Migrado framer-motion → motion/react em todas as seções; framer-motion removido
+
+### Item 4 — Hero
+- ParallaxHeroImages (ícone da marca, sem fotos) + TextGenerateEffect no subtítulo;
+  headline continua em SplitReveal (transform) para proteger o LCP
+- staggerDelay do TextGenerateEffect: 0.2s padrão era lento demais (~3s p/ frase de
+  14 palavras) — reduzido para 0.04s nesta seção
+- 3º bug de reduced-motion (mesma causa raiz): ParallaxImage com initial/animate
+  virando `undefined` prendia opacity/scale — corrigido com valores sempre explícitos
 
 ### Diagnóstico
 - Versões: next@16.3.5, react@19.2.8, tailwindcss@4.3.3, framer-motion@13.2.0,
