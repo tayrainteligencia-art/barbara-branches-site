@@ -5,6 +5,7 @@ import { Differentiators } from "@/components/sections/differentiators";
 import { Professional } from "@/components/sections/professional";
 import { Gallery } from "@/components/sections/gallery";
 import { HowItWorks } from "@/components/sections/how-it-works";
+import { Testimonials } from "@/components/sections/testimonials";
 
 export default function Home() {
   return (
@@ -16,6 +17,7 @@ export default function Home() {
       <Professional />
       <Gallery />
       <HowItWorks />
+      <Testimonials />
     </main>
   );
 }
