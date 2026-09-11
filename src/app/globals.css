@@ -1,26 +1,57 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Marca — ver BRAND_ANALYSIS.md */
+  --color-bronze: #b0824a;
+  --color-bronze-dark: #8c6635;
+  --color-bronze-light: #d4af7a;
+
+  --color-ink: #15130f;
+  --color-ink-soft: #2a2620;
+
+  --color-cream: #fbf8f2;
+  --color-cream-deep: #f2ead9;
+  --color-cream-line: #e4d7be;
+
+  --color-surface-dark: #0e0c09;
+  --color-surface-dark-2: #1c1710;
+
+  --background: var(--color-cream);
+  --foreground: var(--color-ink-soft);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+
+  --color-bronze: var(--color-bronze);
+  --color-bronze-dark: var(--color-bronze-dark);
+  --color-bronze-light: var(--color-bronze-light);
+  --color-ink: var(--color-ink);
+  --color-ink-soft: var(--color-ink-soft);
+  --color-cream: var(--color-cream);
+  --color-cream-deep: var(--color-cream-deep);
+  --color-cream-line: var(--color-cream-line);
+  --color-surface-dark: var(--color-surface-dark);
+  --color-surface-dark-2: var(--color-surface-dark-2);
+
+  --font-display: var(--font-cinzel);
+  --font-sans: var(--font-montserrat);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* Site institucional: identidade visual fixa, não segue o tema do sistema. */
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }
