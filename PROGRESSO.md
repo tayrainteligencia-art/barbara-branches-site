@@ -1,8 +1,9 @@
 # Progresso do projeto
 
 ## Redesign Portfólio (branch `redesign/portfolio`)
-Estado: Etapa 2, item 4 concluído (Hero) → validação de marco OK. Próximo: item 5
-(demais seções, uma por vez), começando por Sobre.
+Estado: Etapa 2, item 5 em andamento. Feito: Sobre (text-generate-effect),
+Tratamentos (Focus Cards), Diferenciais (Sticky Scroll Reveal). Próximo:
+Estrutura/Galeria (Layout Grid).
 
 ### Item 1 — tokens + next-themes + toggle
 - Tokens únicos background/foreground/accent-text/accent-solid nos 2 temas, contraste
@@ -33,6 +34,15 @@ Estado: Etapa 2, item 4 concluído (Hero) → validação de marco OK. Próximo:
   14 palavras) — reduzido para 0.04s nesta seção
 - 3º bug de reduced-motion (mesma causa raiz): ParallaxImage com initial/animate
   virando `undefined` prendia opacity/scale — corrigido com valores sempre explícitos
+
+### Item 5 — demais seções
+- Sobre: TextGenerateEffect ganhou prop `play` (sempre montado, sem CLS; anima só
+  quando `useInView`)
+- Tratamentos: Focus Cards sem fotos reais — texto sempre visível, foco/hover só
+  realça um card e borra os outros; acessível por teclado (tabIndex+onFocus/onBlur)
+- Diferenciais: Sticky Scroll Reveal original usava container com overflow interno
+  (conflita com Lenis) — reescrito para rastrear o scroll da página; gradientes
+  genéricos trocados por token accent-text
 
 ### Diagnóstico
 - Versões: next@16.3.5, react@19.2.8, tailwindcss@4.3.3, framer-motion@13.2.0,
