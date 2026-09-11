@@ -25,6 +25,30 @@ Etapa 3 em andamento — construção seção por seção.
 - Auditoria de conversão rápida do hero+CTA: sem bloqueios; prova social e
   mensuração de conversão ficam para etapas seguintes (dependem de dados
   reais / decisão sobre ferramenta de analytics)
+- Etapa 3 — seção Sobre/Manifesto: layout assimétrico com painel decorativo
+  (símbolo da marca, sem foto real)
+- Etapa 3 — seção Tratamentos: lista editorial numerada, categorias
+  ilustrativas com aviso de que a lista oficial será confirmada
+- Etapa 3 — seção Diferenciais: 4 itens qualitativos, sem contadores
+  numéricos fabricados (nenhum dado real disponível)
+- Etapa 3 — seção Profissional responsável: placeholder visualmente óbvio
+  (borda tracejada + texto "TODO") para nome/CRM/bio, dado que são
+  informações reguladas que não podem ser inventadas
+- Etapa 3 — seção Estrutura/Galeria: grade com revelação por clip-path
+  (GSAP ScrollTrigger), placeholders de foto no mesmo padrão visual
+- Etapa 3 — seção Como funciona: 4 etapas do atendimento (agendamento →
+  avaliação → plano → acompanhamento)
+- Lição de processo: screenshots fullPage do Playwright não disparam
+  ScrollTrigger/whileInView sozinhos — o script `scripts/visual-check.mjs`
+  agora simula scroll real via `page.mouse.wheel` antes de capturar
+- Dois bugs reais de acessibilidade corrigidos (mesma causa-raiz): com
+  `prefers-reduced-motion`, `useReducedMotion()` retorna `false` no primeiro
+  render do cliente (snapshot do servidor) e só corrige para o valor real
+  logo em seguida — qualquer efeito que "resolva" a partir de um retorno
+  antecipado (`if (reducedMotion) return`) sem redefinir o estado deixa
+  elementos presos invisíveis. Corrigido no `SplitReveal` (GSAP) e no hook
+  `useFadeUp` (Framer Motion), que agora sempre aplicam um estado explícito
+  para os dois casos em vez de omitir props condicionalmente.
 
 ## Decisões importantes já tomadas
 - Paleta do site: bronze `#B0824A` (único acento) + preto + base neutra clara
@@ -38,7 +62,8 @@ Etapa 3 em andamento — construção seção por seção.
   `.git` próprio, vazio, sem relação com este projeto)
 
 ## Próxima tarefa
-Seção "Manifesto / Sobre a clínica" (item 3 da estrutura aprovada).
+Seção "Depoimentos" (item 9 da estrutura aprovada) — placeholder, sem
+depoimentos reais disponíveis.
 
 ## Pendências bloqueantes
 Ver `PENDENCIAS.md` — principalmente dados reais da clínica (endereço, telefone,
