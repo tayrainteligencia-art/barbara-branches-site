@@ -1,7 +1,8 @@
 # Progresso do projeto
 
 ## Etapa atual
-Etapa 3 em andamento — construção seção por seção.
+Etapa 3 concluída (todas as 13 seções + SEO/performance). Próximo: Etapa 4
+(auditoria de conversão completa).
 
 ## Concluído
 - Etapa 0: ambiente verificado, projeto Next.js 16 + TS + Tailwind 4 criado,
@@ -49,6 +50,23 @@ Etapa 3 em andamento — construção seção por seção.
   elementos presos invisíveis. Corrigido no `SplitReveal` (GSAP) e no hook
   `useFadeUp` (Framer Motion), que agora sempre aplicam um estado explícito
   para os dois casos em vez de omitir props condicionalmente.
+- Etapa 3 — seção Depoimentos: placeholder honesto (sem avaliações
+  inventadas), com aviso de que depoimentos reais serão publicados após
+  autorização dos pacientes
+- Etapa 3 — seção FAQ: accordion acessível (CSS grid-template-rows,
+  aria-expanded/aria-controls), respostas sem promessa de resultado garantido
+- Etapa 3 — CTA final, seção de Contato/Localização (formulário com
+  validação + consentimento LGPD, rota `/api/contact` com Resend quando
+  configurado e fallback para WhatsApp quando não) e Footer completo
+- Etapa 3 — SEO/performance: favicon e apple-icon gerados do símbolo da
+  marca, `robots.ts`/`sitemap.ts`, imagem Open Graph dinâmica (1200x630),
+  JSON-LD `LocalBusiness` só com campos confirmados (sem endereço/telefone
+  inventados)
+- Build de produção (`npm run build`) e lint passando sem erros/avisos em
+  todo o projeto
+- Bug real encontrado e corrigido: `.gitignore` tinha `.env*` sem exceção,
+  então `.env.example` nunca foi commitado desde a Etapa 0 — corrigido com
+  `!.env.example`
 
 ## Decisões importantes já tomadas
 - Paleta do site: bronze `#B0824A` (único acento) + preto + base neutra clara
@@ -62,8 +80,9 @@ Etapa 3 em andamento — construção seção por seção.
   `.git` próprio, vazio, sem relação com este projeto)
 
 ## Próxima tarefa
-Seção "Depoimentos" (item 9 da estrutura aprovada) — placeholder, sem
-depoimentos reais disponíveis.
+Etapa 4 — rodar auditoria de conversão completa na página inteira, gerar
+`AUDITORIA_CONVERSAO.md`, aplicar melhorias que não dependem de dados
+externos e listar separadamente o que depende de decisão do cliente.
 
 ## Pendências bloqueantes
 Ver `PENDENCIAS.md` — principalmente dados reais da clínica (endereço, telefone,
