@@ -1,8 +1,8 @@
 # Progresso do projeto
 
 ## Redesign Portfólio (branch `redesign/portfolio`)
-Estado: Etapa 2, item 2 concluído (fundo único, sem cor por seção). Próximo: item 3
-(Navbar com floating-navbar).
+Estado: Etapa 2, item 3 concluído (Navbar). Próximo: item 4 (Hero com
+parallax-hero-images + text-generate-effect) → validação de marco.
 
 ### Item 1 — tokens + next-themes + toggle
 - Tokens únicos background/foreground/accent-text/accent-solid nos 2 temas, contraste
@@ -18,6 +18,13 @@ Estado: Etapa 2, item 2 concluído (fundo único, sem cor por seção). Próximo
 - Divisores: `border-t border-border` + `SectionLabel` ("0N — Nome") + py-24 md:py-40
 - `scripts/check.mjs` precisava de mais espera pós-scroll/load (preloader + reveal
   animados) — screenshots antes disso pegavam animação pela metade, não é bug real
+
+### Item 3 — Navbar
+- `shadcn init` sobrescreveu lib/utils.ts e globals.css com o preset "Nova" (parei e
+  perguntei, conforme regra 3) — revertidos, mantido só components.json
+- floating-navbar instalado e adaptado: tokens da marca, PT-BR, logo+toggle no pill,
+  reduced-motion (duração 0)
+- Migrado framer-motion → motion/react em todas as seções; framer-motion removido
 
 ### Diagnóstico
 - Versões: next@16.3.5, react@19.2.8, tailwindcss@4.3.3, framer-motion@13.2.0,
