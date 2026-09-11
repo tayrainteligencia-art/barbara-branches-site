@@ -3,6 +3,7 @@
 import { motion } from "motion/react";
 import { SplitReveal } from "@/components/split-reveal";
 import { SectionLabel } from "@/components/section-label";
+import { FocusCards } from "@/components/ui/focus-cards";
 import { useFadeUp } from "@/hooks/use-fade-up";
 
 // TODO(PENDENCIAS.md): lista ilustrativa de categorias comuns em clínicas de
@@ -62,30 +63,9 @@ export function Treatments() {
           </motion.p>
         </div>
 
-        <div className="mt-16 grid gap-x-12 border-t border-border sm:grid-cols-2">
-          {treatments.map((treatment, index) => (
-            <motion.div
-              key={treatment.title}
-              {...fadeUp}
-              transition={{
-                ...fadeUp.transition,
-                delay: (index % 2) * 0.08,
-              }}
-              className="group border-b border-border py-8"
-            >
-              <span className="font-display text-sm text-accent-text">
-                {String(index + 1).padStart(2, "0")}
-              </span>
-              <h3 className="mt-3 font-display text-xl tracking-wide text-foreground sm:text-2xl">
-                {treatment.title}
-              </h3>
-              <p className="mt-3 max-w-md font-sans text-sm leading-relaxed text-foreground/75 sm:text-base">
-                {treatment.description}
-              </p>
-              <span className="mt-5 block h-px w-10 bg-accent-solid/40 transition-all duration-300 group-hover:w-16 group-hover:bg-accent-solid" />
-            </motion.div>
-          ))}
-        </div>
+        <motion.div {...fadeUp} className="mt-16">
+          <FocusCards cards={treatments} />
+        </motion.div>
       </div>
     </section>
   );
