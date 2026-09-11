@@ -4,6 +4,7 @@ import { Treatments } from "@/components/sections/treatments";
 import { Differentiators } from "@/components/sections/differentiators";
 import { Professional } from "@/components/sections/professional";
 import { Gallery } from "@/components/sections/gallery";
+import { HowItWorks } from "@/components/sections/how-it-works";
 
 export default function Home() {
   return (
@@ -14,6 +15,7 @@ export default function Home() {
       <Differentiators />
       <Professional />
       <Gallery />
+      <HowItWorks />
     </main>
   );
 }
