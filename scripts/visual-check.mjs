@@ -32,6 +32,17 @@ for (const vp of viewports) {
   await page.goto(url, { waitUntil: "networkidle" });
   await page.waitForTimeout(1800);
 
+  // Scroll real via wheel (Lenis intercepta wheel/touch, não scrollTo direto)
+  // para que os ScrollTriggers disparem de verdade antes do screenshot fullPage.
+  const totalHeight = await page.evaluate(() => document.documentElement.scrollHeight);
+  let scrolled = 0;
+  while (scrolled < totalHeight) {
+    await page.mouse.wheel(0, 600);
+    scrolled += 600;
+    await page.waitForTimeout(120);
+  }
+  await page.waitForTimeout(400);
+
   const scrollWidth = await page.evaluate(() => document.documentElement.scrollWidth);
   const clientWidth = await page.evaluate(() => document.documentElement.clientWidth);
   const hasHorizontalScroll = scrollWidth > clientWidth + 1;
