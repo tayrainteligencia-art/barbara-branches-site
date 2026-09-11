@@ -3,6 +3,7 @@ import { About } from "@/components/sections/about";
 import { Treatments } from "@/components/sections/treatments";
 import { Differentiators } from "@/components/sections/differentiators";
 import { Professional } from "@/components/sections/professional";
+import { Gallery } from "@/components/sections/gallery";
 
 export default function Home() {
   return (
@@ -12,6 +13,7 @@ export default function Home() {
       <Treatments />
       <Differentiators />
       <Professional />
+      <Gallery />
     </main>
   );
 }
