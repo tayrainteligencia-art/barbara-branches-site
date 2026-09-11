@@ -7,6 +7,8 @@ import { Gallery } from "@/components/sections/gallery";
 import { HowItWorks } from "@/components/sections/how-it-works";
 import { Testimonials } from "@/components/sections/testimonials";
 import { Faq } from "@/components/sections/faq";
+import { CtaFinal } from "@/components/sections/cta-final";
+import { Contact } from "@/components/sections/contact";
 
 export default function Home() {
   return (
@@ -20,6 +22,8 @@ export default function Home() {
       <HowItWorks />
       <Testimonials />
       <Faq />
+      <CtaFinal />
+      <Contact />
     </main>
   );
 }

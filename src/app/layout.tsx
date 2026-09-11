@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Cinzel, Montserrat } from "next/font/google";
 import { SmoothScrollProvider } from "@/components/smooth-scroll-provider";
 import { WhatsAppButton } from "@/components/whatsapp-button";
+import { Footer } from "@/components/footer";
 import { Preloader } from "@/components/preloader";
 import { PreloaderProvider } from "@/lib/preloader-context";
 import "./globals.css";
@@ -52,7 +53,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col bg-cream text-ink-soft font-sans">
         <PreloaderProvider>
           <Preloader />
-          <SmoothScrollProvider>{children}</SmoothScrollProvider>
+          <SmoothScrollProvider>
+            {children}
+            <Footer />
+          </SmoothScrollProvider>
         </PreloaderProvider>
         <WhatsAppButton />
       </body>

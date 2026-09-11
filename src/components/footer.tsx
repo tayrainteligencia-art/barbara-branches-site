@@ -1,0 +1,83 @@
+import Image from "next/image";
+import { getWhatsAppLink } from "@/lib/whatsapp";
+
+const links = [
+  { label: "Sobre", href: "#sobre" },
+  { label: "Tratamentos", href: "#tratamentos" },
+  { label: "Profissional", href: "#profissional" },
+  { label: "Estrutura", href: "#estrutura" },
+  { label: "Perguntas frequentes", href: "#faq" },
+  { label: "Contato", href: "#contato" },
+];
+
+export function Footer() {
+  const whatsappHref = getWhatsAppLink();
+  const year = new Date().getFullYear();
+
+  return (
+    <footer className="bg-surface-dark pt-16 pb-8">
+      <div className="mx-auto max-w-6xl px-6 sm:px-10 lg:px-8">
+        <div className="grid gap-12 sm:grid-cols-3">
+          <div>
+            <Image
+              src="/brand/logo-full.webp"
+              alt="Bárbara Branches"
+              width={180}
+              height={120}
+              className="h-auto w-36 object-contain"
+            />
+            <p className="mt-4 max-w-xs font-sans text-sm leading-relaxed text-cream/55">
+              Beleza, ciência e harmonia em cada etapa do seu cuidado.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="font-sans text-xs font-medium tracking-[0.25em] text-bronze-light uppercase">
+              Navegação
+            </h3>
+            <ul className="mt-4 space-y-2">
+              {links.map((link) => (
+                <li key={link.href}>
+                  <a
+                    href={link.href}
+                    className="font-sans text-sm text-cream/65 transition-colors hover:text-cream"
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="font-sans text-xs font-medium tracking-[0.25em] text-bronze-light uppercase">
+              Contato
+            </h3>
+            <ul className="mt-4 space-y-2 font-sans text-sm text-cream/65">
+              {whatsappHref ? (
+                <li>
+                  <a
+                    href={whatsappHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="transition-colors hover:text-cream"
+                  >
+                    WhatsApp
+                  </a>
+                </li>
+              ) : (
+                <li className="italic text-cream/40">WhatsApp — a confirmar</li>
+              )}
+              <li className="italic text-cream/40">Redes sociais — em breve</li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="mt-12 flex flex-col gap-2 border-t border-cream/10 pt-6 font-sans text-xs text-cream/40 sm:flex-row sm:items-center sm:justify-between">
+          <p>© {year} Bárbara Branches. Todos os direitos reservados.</p>
+          <p className="italic">CNPJ — a confirmar</p>
+        </div>
+      </div>
+    </footer>
+  );
+}
