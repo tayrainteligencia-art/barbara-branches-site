@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { SplitReveal } from "@/components/split-reveal";
 import { ContactForm } from "@/components/contact-form";
+import { SectionLabel } from "@/components/section-label";
 import { useFadeUp } from "@/hooks/use-fade-up";
 
 // TODO(PENDENCIAS.md): endereço, telefone e horário reais da clínica.
@@ -16,24 +17,22 @@ export function Contact() {
   const fadeUp = useFadeUp();
 
   return (
-    <section id="contato" className="bg-cream py-24 sm:py-32">
+    <section id="contato" className="border-t border-border py-24 md:py-40">
       <div className="mx-auto max-w-6xl px-6 sm:px-10 lg:px-8">
-        <p className="mb-6 font-sans text-xs font-medium tracking-[0.35em] text-bronze uppercase">
-          Localização e contato
-        </p>
+        <SectionLabel number="09" title="Contato" />
         <SplitReveal
           as="h2"
           text="Vamos conversar sobre o seu cuidado"
-          className="max-w-2xl font-display text-3xl leading-[1.2] tracking-wide text-ink sm:text-4xl lg:text-[2.75rem]"
+          className="max-w-2xl font-display text-3xl leading-[1.2] tracking-wide text-foreground sm:text-4xl lg:text-[2.75rem]"
         />
 
         <div className="mt-16 grid gap-12 lg:grid-cols-2 lg:gap-16">
           <div className="space-y-10">
             <motion.div
               {...fadeUp}
-              className="flex aspect-video w-full items-center justify-center rounded-2xl border border-dashed border-bronze/50 bg-cream-deep/50"
+              className="flex aspect-video w-full items-center justify-center rounded-2xl border border-dashed border-accent-text/50"
             >
-              <p className="font-sans text-xs italic text-ink-soft/50">
+              <p className="font-sans text-xs italic text-foreground/50">
                 Mapa — endereço a confirmar
               </p>
             </motion.div>
@@ -41,14 +40,14 @@ export function Contact() {
             <motion.dl
               {...fadeUp}
               transition={{ ...fadeUp.transition, delay: 0.1 }}
-              className="space-y-6 border-t border-cream-line pt-6"
+              className="space-y-6 border-t border-border pt-6"
             >
               {info.map((item) => (
                 <div key={item.label}>
-                  <dt className="font-sans text-xs font-medium tracking-[0.2em] text-bronze uppercase">
+                  <dt className="font-sans text-xs font-medium tracking-[0.2em] text-accent-text uppercase">
                     {item.label}
                   </dt>
-                  <dd className="mt-1 font-sans text-base italic text-ink-soft/60">
+                  <dd className="mt-1 font-sans text-base italic text-foreground/60">
                     {item.value}
                   </dd>
                 </div>

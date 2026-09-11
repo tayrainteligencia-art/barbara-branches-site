@@ -10,7 +10,7 @@ type Status =
   | { state: "error"; message: string };
 
 const inputClasses =
-  "w-full rounded-lg border border-cream-line bg-cream px-4 py-3 font-sans text-sm text-ink placeholder:text-ink-soft/40 focus:border-bronze focus:outline-none focus:ring-1 focus:ring-bronze";
+  "w-full rounded-lg border border-border bg-background px-4 py-3 font-sans text-sm text-foreground placeholder:text-foreground/40 focus:border-accent-text focus:outline-none focus:ring-1 focus:ring-accent-text";
 
 export function ContactForm() {
   const [status, setStatus] = useState<Status>({ state: "idle" });
@@ -58,7 +58,7 @@ export function ContactForm() {
 
   if (status.state === "success") {
     return (
-      <p className="rounded-lg border border-bronze/40 bg-cream-deep/60 p-6 font-sans text-sm text-ink-soft">
+      <p className="rounded-lg border border-accent-text/40 p-6 font-sans text-sm text-foreground">
         Mensagem enviada! Em breve entraremos em contato.
       </p>
     );
@@ -120,12 +120,12 @@ export function ContactForm() {
         />
       </div>
 
-      <label className="flex items-start gap-3 font-sans text-xs leading-relaxed text-ink-soft/70">
+      <label className="flex items-start gap-3 font-sans text-xs leading-relaxed text-foreground/70">
         <input
           type="checkbox"
           name="consent"
           required
-          className="mt-0.5 h-4 w-4 rounded border-cream-line accent-bronze"
+          className="mt-0.5 h-4 w-4 rounded border-border accent-accent-solid"
         />
         Concordo com o uso dos meus dados exclusivamente para retorno deste
         contato, conforme a LGPD.
@@ -134,13 +134,13 @@ export function ContactForm() {
       <button
         type="submit"
         disabled={status.state === "submitting"}
-        className="inline-flex items-center justify-center rounded-full bg-bronze px-8 py-3.5 text-sm font-medium tracking-wide text-surface-dark transition-colors duration-300 hover:bg-bronze-light disabled:opacity-60"
+        className="inline-flex items-center justify-center rounded-full bg-accent-solid px-8 py-3.5 text-sm font-medium tracking-wide text-accent-solid-foreground transition-opacity duration-300 hover:opacity-90 disabled:opacity-60"
       >
         {status.state === "submitting" ? "Enviando..." : "Enviar mensagem"}
       </button>
 
       {status.state === "error" && (
-        <p className="font-sans text-sm text-ink-soft/80">
+        <p className="font-sans text-sm text-foreground/80">
           {status.message}
           {whatsappHref && (
             <>
@@ -150,7 +150,7 @@ export function ContactForm() {
                 href={whatsappHref}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-medium text-bronze underline"
+                className="font-medium text-accent-text underline"
               >
                 Fale pelo WhatsApp
               </a>

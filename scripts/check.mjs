@@ -32,7 +32,8 @@ page.on("console", (msg) => {
 page.on("pageerror", (err) => consoleErrors.push(String(err)));
 
 await page.goto(url, { waitUntil: "networkidle" });
-await page.waitForTimeout(1200);
+// preloader (~1.5s) + reveal do headline (~1s) precisam assentar antes do check
+await page.waitForTimeout(2800);
 
 const scrollWidth = await page.evaluate(() => document.documentElement.scrollWidth);
 const clientWidth = await page.evaluate(() => document.documentElement.clientWidth);
@@ -56,7 +57,8 @@ if (shot) {
   const path = `.screenshots/${shot}.png`;
   if (selector) {
     await target.scrollIntoViewIfNeeded();
-    await page.waitForTimeout(300);
+    // espera as animações de entrada por scroll (GSAP/Framer) terminarem
+    await page.waitForTimeout(1500);
   }
   await target.screenshot({ path });
   console.log(`screenshot: ${path}`);

@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { SplitReveal } from "@/components/split-reveal";
+import { SectionLabel } from "@/components/section-label";
 import { useFadeUp } from "@/hooks/use-fade-up";
 
 // Sem contadores numéricos: nenhum dado real (anos de atuação, nº de
@@ -34,16 +35,14 @@ export function Differentiators() {
   const fadeUp = useFadeUp();
 
   return (
-    <section className="bg-surface-dark-2 py-24 sm:py-32">
+    <section className="border-t border-border py-24 md:py-40">
       <div className="mx-auto max-w-6xl px-6 sm:px-10 lg:px-8">
         <div className="max-w-2xl">
-          <p className="mb-6 font-sans text-xs font-medium tracking-[0.35em] text-bronze-light uppercase">
-            Diferenciais
-          </p>
+          <SectionLabel number="03" title="Diferenciais" />
           <SplitReveal
             as="h2"
             text="O que torna sua experiência única"
-            className="font-display text-3xl leading-[1.2] tracking-wide text-cream sm:text-4xl lg:text-[2.75rem]"
+            className="font-display text-3xl leading-[1.2] tracking-wide text-foreground sm:text-4xl lg:text-[2.75rem]"
           />
         </div>
 
@@ -53,12 +52,12 @@ export function Differentiators() {
               key={item.title}
               {...fadeUp}
               transition={{ ...fadeUp.transition, delay: (index % 2) * 0.08 }}
-              className="border-t-2 border-bronze pt-6"
+              className="border-t-2 border-accent-text pt-6"
             >
-              <h3 className="font-display text-xl tracking-wide text-cream sm:text-2xl">
+              <h3 className="font-display text-xl tracking-wide text-foreground sm:text-2xl">
                 {item.title}
               </h3>
-              <p className="mt-3 max-w-sm font-sans text-sm leading-relaxed text-cream/65 sm:text-base">
+              <p className="mt-3 max-w-sm font-sans text-sm leading-relaxed text-foreground/65 sm:text-base">
                 {item.description}
               </p>
             </motion.div>
