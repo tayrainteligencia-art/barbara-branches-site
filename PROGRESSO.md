@@ -1,8 +1,8 @@
 # Progresso do projeto
 
 ## Redesign Portfólio (branch `redesign/portfolio`)
-Estado: Etapa 2, item 1 concluído (tokens + next-themes + toggle). Próximo: item 2
-(fundo contínuo, remover cor por seção).
+Estado: Etapa 2, item 2 concluído (fundo único, sem cor por seção). Próximo: item 3
+(Navbar com floating-navbar).
 
 ### Item 1 — tokens + next-themes + toggle
 - Tokens únicos background/foreground/accent-text/accent-solid nos 2 temas, contraste
@@ -11,6 +11,13 @@ Estado: Etapa 2, item 1 concluído (tokens + next-themes + toggle). Próximo: it
   claro/escuro, reduced-motion — sem erros de console
 - Tokens antigos (cream/ink/bronze/surface-dark) removidos do CSS — seções ainda os
   referenciam até o item 2 (próximo commit corrige)
+
+### Item 2 — fundo único + remoção de cor por seção
+- Todas as seções usam só background/foreground/accent-text/accent-solid/border;
+  hero deixou de ser bloco escuro fixo e agora segue o tema (validado claro/escuro)
+- Divisores: `border-t border-border` + `SectionLabel` ("0N — Nome") + py-24 md:py-40
+- `scripts/check.mjs` precisava de mais espera pós-scroll/load (preloader + reveal
+  animados) — screenshots antes disso pegavam animação pela metade, não é bug real
 
 ### Diagnóstico
 - Versões: next@16.3.5, react@19.2.8, tailwindcss@4.3.3, framer-motion@13.2.0,
