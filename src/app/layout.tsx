@@ -7,6 +7,7 @@ import { Preloader } from "@/components/preloader";
 import { PreloaderProvider } from "@/lib/preloader-context";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Navbar } from "@/components/navbar";
+import { NoiseOverlay } from "@/components/noise-overlay";
 import "./globals.css";
 
 const cinzel = Cinzel({
@@ -54,6 +55,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${cinzel.variable} ${montserrat.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground font-sans">
+        <NoiseOverlay />
         <ThemeProvider>
           <PreloaderProvider>
             <Preloader />

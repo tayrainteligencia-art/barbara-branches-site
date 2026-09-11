@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useRef, useState } from "react";
 import { getWhatsAppLink } from "@/lib/whatsapp";
+import { Button as StatefulButton } from "@/components/ui/stateful-button";
 
 type Status =
   | { state: "idle" }
-  | { state: "submitting" }
   | { state: "success" }
   | { state: "error"; message: string };
 
@@ -14,11 +14,15 @@ const inputClasses =
 
 export function ContactForm() {
   const [status, setStatus] = useState<Status>({ state: "idle" });
+  const formRef = useRef<HTMLFormElement>(null);
   const whatsappHref = getWhatsAppLink();
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const form = event.currentTarget;
+  async function submit() {
+    const form = formRef.current;
+    if (!form || !form.reportValidity()) {
+      throw new Error("validation");
+    }
+
     const data = new FormData(form);
     const payload = {
       name: data.get("name"),
@@ -28,32 +32,25 @@ export function ContactForm() {
       consent: data.get("consent") === "on",
     };
 
-    setStatus({ state: "submitting" });
+    setStatus({ state: "idle" });
 
-    try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      const result = await response.json();
+    const response = await fetch("/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    const result = await response.json();
 
-      if (!response.ok || !result.ok) {
-        setStatus({
-          state: "error",
-          message: result.message ?? "Não foi possível enviar sua mensagem.",
-        });
-        return;
-      }
-
-      setStatus({ state: "success" });
-      form.reset();
-    } catch {
+    if (!response.ok || !result.ok) {
       setStatus({
         state: "error",
-        message: "Não foi possível enviar sua mensagem. Tente novamente.",
+        message: result.message ?? "Não foi possível enviar sua mensagem.",
       });
+      throw new Error(result.reason ?? "request_failed");
     }
+
+    setStatus({ state: "success" });
+    form.reset();
   }
 
   if (status.state === "success") {
@@ -65,7 +62,7 @@ export function ContactForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+    <form ref={formRef} className="space-y-4" noValidate>
       <div>
         <label htmlFor="name" className="sr-only">
           Nome
@@ -131,13 +128,13 @@ export function ContactForm() {
         contato, conforme a LGPD.
       </label>
 
-      <button
-        type="submit"
-        disabled={status.state === "submitting"}
-        className="inline-flex items-center justify-center rounded-full bg-accent-solid px-8 py-3.5 text-sm font-medium tracking-wide text-accent-solid-foreground transition-opacity duration-300 hover:opacity-90 disabled:opacity-60"
+      <StatefulButton
+        type="button"
+        onClick={submit}
+        className="px-8 py-3.5 text-sm tracking-wide"
       >
-        {status.state === "submitting" ? "Enviando..." : "Enviar mensagem"}
-      </button>
+        Enviar mensagem
+      </StatefulButton>
 
       {status.state === "error" && (
         <p className="font-sans text-sm text-foreground/80">

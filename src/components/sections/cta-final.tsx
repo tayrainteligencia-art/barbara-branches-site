@@ -1,6 +1,7 @@
 "use client";
 
 import { SplitReveal } from "@/components/split-reveal";
+import { ContainerTextFlip } from "@/components/ui/container-text-flip";
 import { useMagnetic } from "@/hooks/use-magnetic";
 import { getWhatsAppLink } from "@/lib/whatsapp";
 
@@ -10,8 +11,11 @@ export function CtaFinal() {
   const magneticRef = useMagnetic<HTMLAnchorElement>();
 
   return (
-    <section className="border-t border-border py-24 md:py-40">
+    <section id="agendar" className="border-t border-border py-24 md:py-40">
       <div className="mx-auto max-w-3xl px-6 text-center sm:px-10 lg:px-8">
+        <div className="mb-8 flex justify-center">
+          <ContainerTextFlip words={["ciência", "beleza", "harmonia"]} />
+        </div>
         <SplitReveal
           as="h2"
           text="Agende sua avaliação e descubra o seu equilíbrio ideal"
