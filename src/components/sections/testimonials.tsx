@@ -3,11 +3,16 @@
 import { motion } from "motion/react";
 import { SplitReveal } from "@/components/split-reveal";
 import { SectionLabel } from "@/components/section-label";
+import { AnimatedTestimonials } from "@/components/ui/animated-testimonials";
 import { useFadeUp } from "@/hooks/use-fade-up";
 
 // TODO(PENDENCIAS.md): substituir pelos depoimentos reais de pacientes,
 // com autorização de uso do nome/imagem. Nenhum depoimento é inventado.
-const placeholders = [1, 2, 3];
+const placeholders = [
+  { quote: "Depoimento de paciente — a confirmar.", name: "Nome do paciente — a confirmar" },
+  { quote: "Depoimento de paciente — a confirmar.", name: "Nome do paciente — a confirmar" },
+  { quote: "Depoimento de paciente — a confirmar.", name: "Nome do paciente — a confirmar" },
+];
 
 export function Testimonials() {
   const fadeUp = useFadeUp();
@@ -31,27 +36,8 @@ export function Testimonials() {
           </motion.p>
         </div>
 
-        <div className="mt-16 grid gap-6 sm:grid-cols-3">
-          {placeholders.map((item) => (
-            <motion.div
-              key={item}
-              {...fadeUp}
-              transition={{ ...fadeUp.transition, delay: item * 0.08 }}
-              className="rounded-2xl border border-dashed border-foreground/25 p-6"
-            >
-              <svg
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-                className="h-6 w-6 text-accent-text/60"
-                fill="currentColor"
-              >
-                <path d="M7.5 6C4.46 6 2 8.46 2 11.5S4.46 17 7.5 17c.34 0 .67-.03 1-.09-.6 1.6-2.02 2.8-3.77 3.05a1 1 0 0 0 .14 1.99c3.7-.27 6.63-3.37 6.63-7.02V11.5C11.5 8.46 9.04 6 6 6Zm11 0c-3.04 0-5.5 2.46-5.5 5.5S14.96 17 18 17c.34 0 .67-.03 1-.09-.6 1.6-2.02 2.8-3.77 3.05a1 1 0 0 0 .14 1.99c3.7-.27 6.63-3.37 6.63-7.02V11.5C22 8.46 19.54 6 16.5 6Z" />
-              </svg>
-              <p className="mt-4 font-sans text-sm italic leading-relaxed text-foreground/45">
-                Depoimento de paciente — a confirmar
-              </p>
-            </motion.div>
-          ))}
+        <div className="mt-16">
+          <AnimatedTestimonials testimonials={placeholders} />
         </div>
       </div>
     </section>
