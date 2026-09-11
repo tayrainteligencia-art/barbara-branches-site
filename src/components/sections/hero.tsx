@@ -1,72 +1,34 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import Image from "next/image";
-import gsap from "gsap";
 import { SplitReveal } from "@/components/split-reveal";
+import { TextGenerateEffect } from "@/components/ui/text-generate-effect";
+import { ParallaxHeroImages } from "@/components/ui/parallax-hero-images";
 import { usePreloaderReady } from "@/lib/preloader-context";
-import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { useMagnetic } from "@/hooks/use-magnetic";
 import { getWhatsAppLink } from "@/lib/whatsapp";
 import { cn } from "@/lib/utils";
 
 export function Hero() {
   const ready = usePreloaderReady();
-  const reducedMotion = useReducedMotion();
-  const sectionRef = useRef<HTMLElement>(null);
-  const iconRef = useRef<HTMLDivElement>(null);
 
   const whatsappHref = getWhatsAppLink();
   const primaryHref = whatsappHref ?? "#contato";
   const magneticRef = useMagnetic<HTMLAnchorElement>();
 
-  useEffect(() => {
-    if (reducedMotion) return;
-    const section = sectionRef.current;
-    const icon = iconRef.current;
-    if (!section || !icon) return;
-
-    const tween = gsap.to(icon, {
-      yPercent: 18,
-      ease: "none",
-      scrollTrigger: {
-        trigger: section,
-        start: "top top",
-        end: "bottom top",
-        scrub: true,
-      },
-    });
-
-    return () => {
-      tween.scrollTrigger?.kill();
-      tween.kill();
-    };
-  }, [reducedMotion]);
-
   return (
-    <section
-      ref={sectionRef}
-      className="relative flex min-h-[100svh] flex-col justify-center overflow-hidden bg-background px-6 text-foreground sm:px-10 lg:px-20"
-    >
+    <section className="relative flex min-h-[100svh] flex-col justify-center overflow-hidden px-6 sm:px-10 lg:px-20">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_70%_25%,rgba(176,130,74,0.16),transparent_60%)]"
       />
 
-      <div
-        ref={iconRef}
-        aria-hidden="true"
-        className="pointer-events-none absolute -right-24 top-1/2 h-[520px] w-[520px] -translate-y-1/2 opacity-[0.14] sm:h-[640px] sm:w-[640px] lg:-right-16 lg:h-[760px] lg:w-[760px]"
-      >
-        <Image
-          src="/brand/icon.webp"
-          alt=""
-          fill
-          priority
-          sizes="760px"
-          className="object-contain"
-        />
-      </div>
+      {/* Sem fotos reais da clínica (ver PENDENCIAS.md): usa o símbolo da
+      marca como camada decorativa de parallax em vez de fotografia. */}
+      <ParallaxHeroImages
+        images={["/brand/icon.webp", "/brand/icon.webp", "/brand/icon.webp"]}
+        className="hidden sm:block"
+        imageClassName="!h-16 !w-16 md:!h-24 md:!w-24 rounded-full object-contain bg-transparent shadow-none ring-0 opacity-20"
+      />
 
       <div className="relative z-10 max-w-3xl">
         <p className="mb-6 font-sans text-xs font-medium tracking-[0.35em] text-accent-text uppercase">
@@ -81,16 +43,16 @@ export function Hero() {
           className="font-display text-4xl leading-[1.15] tracking-wide text-foreground sm:text-5xl lg:text-6xl"
         />
 
-        <p
-          className={cn(
-            "mt-8 max-w-xl text-balance font-sans text-base leading-relaxed text-foreground/70 transition-opacity duration-700 ease-out sm:text-lg",
-            ready ? "opacity-100" : "opacity-0",
+        <div className="mt-8 max-w-xl min-h-[3.5rem] sm:min-h-[3rem]">
+          {ready && (
+            <TextGenerateEffect
+              words="Tratamentos estéticos personalizados, conduzidos com técnica e sensibilidade, para realçar a sua beleza natural."
+              duration={0.4}
+              staggerDelay={0.04}
+              className="text-balance text-base leading-relaxed text-foreground/70 sm:text-lg"
+            />
           )}
-          style={{ transitionDelay: "0.65s" }}
-        >
-          Tratamentos estéticos personalizados, conduzidos com técnica e
-          sensibilidade, para realçar a sua beleza natural.
-        </p>
+        </div>
 
         <div
           className={cn(
