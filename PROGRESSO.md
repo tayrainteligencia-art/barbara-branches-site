@@ -1,5 +1,29 @@
 # Progresso do projeto
 
+## Redesign Portfólio (branch `redesign/portfolio`)
+Estado: Etapa 0 (diagnóstico) concluída. Próximo passo: escrever PLANO_REDESIGN.md e
+aguardar aprovação.
+
+### Diagnóstico
+- Versões: next@16.3.5, react@19.2.8, tailwindcss@4.3.3, framer-motion@13.2.0,
+  gsap@3.15.0, lenis@1.3.26 — `motion` não instalado ainda (framer-motion legado)
+- `components.json` não existe — `npx shadcn@latest init` será necessário
+- Lighthouse baseline (build de produção): performance 77, accessibility 96,
+  best-practices 100, seo 100 (`.lighthouse/report.json`)
+- Componentes Aceternity confirmados no registry (nomes exatos):
+  - Uso obrigatório: floating-navbar, parallax-hero-images, focus-cards,
+    layout-grid, text-generate-effect, sticky-scroll-reveal, animated-testimonials
+  - Opcionais: resizable-navbar, images-slider, direction-aware-hover,
+    parallax-scroll, apple-cards-carousel, timeline, container-text-flip,
+    animated-modal, stateful-button, noise-background
+  - "Expandable Card" = `expandable-card-on-click` (tipo block, não ui)
+  - Restrito (pedir aprovação): compare
+
+### Decisões (1 linha cada)
+- Dev server parado antes do build de produção do Lighthouse e reiniciado depois,
+  para não conflitar na porta 3000.
+
+
 ## Etapa atual
 Etapa 3 concluída (todas as 13 seções + SEO/performance). Próximo: Etapa 4
 (auditoria de conversão completa).
