@@ -1,7 +1,7 @@
 # Barbara Branches — Landing Page
 
 Landing page institucional da clínica Barbara Branches: página única, premium e
-orientada a conversão, com agendamento via WhatsApp e formulário de contato.
+orientada a conversão, com agendamento via WhatsApp.
 
 ## Stack
 
@@ -34,12 +34,13 @@ npm run lint     # checagem de lint
 
 ## Deploy
 
-O deploy é automático via GitHub Actions (`.github/workflows/deploy-cpanel.yml`):
-a cada push na branch `main`, o workflow builda o projeto e publica no cPanel
-(Hostgator) via SSH/rsync, usando o Node.js Selector do cPanel para rodar o
-servidor (`server.js`). Variáveis `NEXT_PUBLIC_*` são injetadas no build via
-GitHub Secrets; variáveis server-side (`RESEND_API_KEY`, `CONTACT_EMAIL_*`)
-são configuradas diretamente no app Node.js do cPanel.
+O site é exportado como HTML estático (`output: "export"` no
+`next.config.ts`, sem rotas de API) e publicado automaticamente via GitHub
+Actions (`.github/workflows/deploy-cpanel.yml`): a cada push na branch
+`main`, o workflow builda o projeto (`npm run build`, que gera a pasta
+`out/`) e envia os arquivos via SSH/rsync direto para o document root do
+domínio no cPanel (Hostgator). Não é necessário Node.js no servidor.
+Variáveis `NEXT_PUBLIC_*` são injetadas no build via GitHub Secrets.
 
 ## Documentos do projeto
 

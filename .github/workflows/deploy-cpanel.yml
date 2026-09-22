@@ -21,19 +21,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build
+      - name: Build static export
         env:
           NEXT_PUBLIC_SITE_URL: ${{ secrets.NEXT_PUBLIC_SITE_URL }}
           NEXT_PUBLIC_WHATSAPP_NUMBER: ${{ secrets.NEXT_PUBLIC_WHATSAPP_NUMBER }}
           NEXT_PUBLIC_WHATSAPP_MESSAGE: ${{ secrets.NEXT_PUBLIC_WHATSAPP_MESSAGE }}
         run: npm run build
-
-      - name: Prepare deploy bundle
-        run: |
-          mkdir -p deploy
-          cp -r .next deploy/.next
-          cp -r public deploy/public
-          cp package.json package-lock.json server.js next.config.ts deploy/
 
       - name: Install SSH key
         uses: webfactory/ssh-agent@v0.9.0
@@ -45,19 +38,9 @@ jobs:
           mkdir -p ~/.ssh
           ssh-keyscan -p "${{ secrets.SSH_PORT }}" -H "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
 
-      - name: Upload build to server
+      - name: Upload static site to server
         run: |
           rsync -az --delete \
             -e "ssh -p ${{ secrets.SSH_PORT }}" \
-            deploy/ "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.DEPLOY_PATH }}/"
-
-      - name: Install production deps and restart app
-        env:
-          SSH_PORT: ${{ secrets.SSH_PORT }}
-          SSH_USER: ${{ secrets.SSH_USER }}
-          SSH_HOST: ${{ secrets.SSH_HOST }}
-          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
-          NODE_VENV_ACTIVATE: ${{ secrets.NODE_VENV_ACTIVATE }}
-        run: |
-          ssh -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" \
-            "source $NODE_VENV_ACTIVATE && cd $DEPLOY_PATH && npm ci --omit=dev && mkdir -p tmp && touch tmp/restart.txt"
+            --exclude ".well-known" \
+            out/ "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.DEPLOY_PATH }}/"
