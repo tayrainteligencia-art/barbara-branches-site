@@ -34,9 +34,12 @@ npm run lint     # checagem de lint
 
 ## Deploy
 
-O deploy é feito na [Vercel](https://vercel.com), importando este repositório
-diretamente do GitHub. Configure na Vercel as mesmas variáveis de ambiente
-listadas em `.env.example`.
+O deploy é automático via GitHub Actions (`.github/workflows/deploy-cpanel.yml`):
+a cada push na branch `main`, o workflow builda o projeto e publica no cPanel
+(Hostgator) via SSH/rsync, usando o Node.js Selector do cPanel para rodar o
+servidor (`server.js`). Variáveis `NEXT_PUBLIC_*` são injetadas no build via
+GitHub Secrets; variáveis server-side (`RESEND_API_KEY`, `CONTACT_EMAIL_*`)
+são configuradas diretamente no app Node.js do cPanel.
 
 ## Documentos do projeto
 
