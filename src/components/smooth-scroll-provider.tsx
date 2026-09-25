@@ -14,6 +14,15 @@ export function SmoothScrollProvider({ children }: { children: React.ReactNode }
   useEffect(() => {
     if (reducedMotion) return;
 
+    // Em touch (celular), o scroll nativo já roda suave no compositor do
+    // sistema; a camada extra de JS do Lenis (raf every frame, sincronizado
+    // ao ticker do GSAP) só compete por tempo de main thread com as
+    // animações de ScrollTrigger, e é uma causa conhecida de travamento
+    // específico no Safari iOS. Em touch, deixamos o ScrollTrigger ouvir o
+    // scroll nativo direto (comportamento padrão dele sem scroller custom).
+    const isTouch = window.matchMedia("(pointer: coarse)").matches;
+    if (isTouch) return;
+
     const lenis = new Lenis({
       autoRaf: false,
     });

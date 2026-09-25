@@ -1,5 +1,56 @@
 # Progresso do projeto
 
+## Animação travando no Safari iOS (2026-09-24)
+Reportado: animações rodam mas travam/engasgam especificamente no Safari do
+iPhone. Não reproduzi em automação (Chromium com toque real via CDP, dev e
+build de produção, com e sem reduced-motion — sem erros, sem elemento preso
+invisível); não consegui testar no motor WebKit aqui (faltam dependências de
+sistema, exigiria `sudo`, não rodei sem autorização). Apliquei duas correções
+de performance conhecidas por causar exatamente esse sintoma no iOS Safari,
+mesmo sem conseguir confirmar no dispositivo real:
+- `SmoothScrollProvider`: Lenis (smooth-scroll via JS, com raf sincronizado
+  ao ticker do GSAP) deixa de ser instanciado em dispositivos touch
+  (`matchMedia("(pointer: coarse)")`) — no touch, o scroll nativo do
+  iOS/Android já roda suave no compositor do sistema, e a camada extra de JS
+  do Lenis só compete por tempo de main thread com as animações de
+  ScrollTrigger. Em touch, o ScrollTrigger volta a ouvir o scroll nativo
+  direto (comportamento padrão dele sem scroller custom). Desktop/mouse
+  continua usando Lenis normalmente.
+- `NoiseOverlay`: elemento fixo em tela cheia com filtro SVG (feTurbulence)
+  ganhou `transform: translateZ(0)` + `will-change: transform` para forçar
+  camada de composição própria — sem isso, Safari pode repintar o filtro a
+  cada frame de scroll.
+- Validado: toque real via CDP (dev e build de produção estático), sem
+  erros, sem elemento preso invisível, scroll completo até o rodapé; visual
+  check 375/768/1440 claro/escuro sem regressão.
+- **Pendência**: confirmar no iPhone real (ou pedir pra alguém testar) se o
+  travamento melhorou. Se persistir, os próximos suspeitos são o
+  `backdrop-blur-md` da navbar flutuante (`floating-navbar.tsx`) — caro no
+  Safari mas parte do design pedido, trade-off a decidir com você — e o
+  `Sticky Scroll Reveal` da seção Diferenciais (pin via GSAP ScrollTrigger,
+  categoria de animação historicamente pesada no iOS).
+
+## HTTPS forçado + HSTS (2026-09-24, branch `redesign/portfolio`)
+Pedido original sugeria `middleware.ts` ou `headers()`/`redirects()` no
+`next.config.ts` como fallback sem acesso à camada de servidor. Nenhum dos
+dois funciona aqui: o site é `output: "export"` (export estático, sem
+servidor Next.js em produção) — middleware e `headers()`/`redirects()` são
+ignorados nesse modo. Implementado em `public/.htaccess` (Apache, o que o
+cPanel/Hostgator realmente usa), que o build copia para `out/.htaccess` e o
+workflow já existente sobe via rsync — sem mudança no pipeline. Cobre tanto
+Apache terminando TLS direto quanto atrás de um proxy que só repassa
+`X-Forwarded-Proto` (não sei qual é o caso exato no plano do Hostgator).
+- Validado: `npm run dev` sem travamento/loop (o `.htaccess` não afeta o
+  Next.js localmente, só o Apache em produção); build de export gera
+  `out/.htaccess` idêntico ao de `public/`; lint sem erros novos.
+- **Não validado**: redirect HTTP→HTTPS e header HSTS reais — isso só
+  acontece no Apache do servidor, e não tenho acesso a ele nem a um
+  ambiente de preview. Só é verificável depois que isso chegar a `main` e
+  passar pelo deploy automático (`curl -I http://<domínio>` deve devolver
+  308 com `Location: https://…`, e `curl -sI https://<domínio> | grep
+  -i strict-transport-security` deve mostrar o header).
+- HSTS sem `preload` de propósito (pedido explicitamente) — reversível.
+
 ## Merge redesign/portfolio → main (2026-09-24)
 `main` tinha avançado, em paralelo ao redesign, para deploy estático via
 GitHub Actions/cPanel (Hostgator não tem Node.js): `output: "export"` no
