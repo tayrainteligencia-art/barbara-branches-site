@@ -1,5 +1,30 @@
 # Progresso do projeto
 
+## Dados reais recebidos (2026-09-24)
+Primeira leva de dados reais da clínica, aplicada nesta sessão:
+- Fotos: Dra. Bárbara (seção Profissional) e 1 foto de procedimento em sala de
+  atendimento (seção Estrutura) — otimizadas em `public/images/`. Duas fotos de
+  antes/depois recebidas junto não foram publicadas (pendência regulatória, ver
+  PENDENCIAS.md) e foram apagadas por engano ao organizar os arquivos — avisado
+  ao cliente, arquivos originais provavelmente recuperáveis no WhatsApp de origem.
+- WhatsApp: link de mensagem confirmado (`wa.me/message/QDEZWMLPXOTUL1`), agora
+  base de `src/lib/whatsapp.ts` — usado no botão flutuante, CTAs e no chat de
+  pré-atendimento (que ganhou uma pergunta de nome para compor a mensagem final).
+- Endereço/telefone/CNPJ: resolvidos a partir do link curto do Google Maps + CNPJ
+  fornecido (consulta pública à Receita Federal) — Nuclear Center Clínica de
+  Diagnósticos por Imagens LTDA, Rua Mauriti 2159, Pedreira, Belém-PA. Já no
+  rodapé, na seção de Contato (com mapa embutido) e no JSON-LD.
+- CRM 6831 da Dra. Bárbara Branches — já na seção Profissional e no rodapé.
+- E-mail atendimento@drabarbarabranches.com.br — no rodapé (caixa ainda não ativa).
+- Nova página `/politica-de-privacidade`: modelo LGPD, banner deixando claro que
+  precisa de revisão jurídica antes de publicação definitiva; link no rodapé.
+- Lighthouse após essas mudanças: performance **79** (linha de base do redesign
+  era 74 — sem regressão, dentro da variação normal de execuções headless) /
+  acessibilidade 97 / boas práticas 100 / SEO 100 (`.lighthouse/report-redesign4.json`).
+- Bug real encontrado e corrigido nesta sessão: rodapé estourava a largura da
+  tela em 768px (e-mail longo sem quebra de linha + barra inferior sem
+  wrap) — corrigido com `break-all` no e-mail e `flex-wrap` na barra do CNPJ/CRM.
+
 ## Redesign Portfólio (branch `redesign/portfolio`)
 Estado: **Etapa 3 concluída — redesign pronto para revisão**, na branch
 `redesign/portfolio` (não mesclado na `main`).
