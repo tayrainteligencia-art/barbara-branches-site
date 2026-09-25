@@ -22,18 +22,29 @@ export const FloatingNav = ({
   end?: React.ReactNode;
   className?: string;
 }) => {
-  const { scrollYProgress } = useScroll();
-  const [visible, setVisible] = useState(false);
+  const { scrollY } = useScroll();
+  // Visível por padrão: no topo (scrollY inicial 0) o navbar deve aparecer
+  // já no primeiro render, sem esperar o primeiro evento de scroll.
+  const [visible, setVisible] = useState(true);
   const reducedMotion = useReducedMotion();
 
-  useMotionValueEvent(scrollYProgress, "change", (current) => {
-    if (typeof current !== "number") return;
-    const direction = current - scrollYProgress.getPrevious()!;
+  // Topo da página: sempre visível, mesmo com pequenas oscilações de
+  // scroll (bounce de touch no mobile) — evita flicker perto de scrollY 0.
+  const TOP_THRESHOLD = 20;
 
-    if (scrollYProgress.get() < 0.05) {
+  useMotionValueEvent(scrollY, "change", (current) => {
+    if (typeof current !== "number") return;
+
+    if (current <= TOP_THRESHOLD) {
+      setVisible(true);
+      return;
+    }
+
+    const previous = scrollY.getPrevious() ?? 0;
+    if (current < previous) {
+      setVisible(true);
+    } else if (current > previous) {
       setVisible(false);
-    } else {
-      setVisible(direction < 0);
     }
   });
 

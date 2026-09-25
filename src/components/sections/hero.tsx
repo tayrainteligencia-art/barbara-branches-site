@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import { SplitReveal } from "@/components/split-reveal";
 import { TextGenerateEffect } from "@/components/ui/text-generate-effect";
 import { usePreloaderReady } from "@/lib/preloader-context";
@@ -82,6 +83,31 @@ export function Hero() {
           >
             Ver tratamentos
           </a>
+        </div>
+
+        <div
+          className={cn(
+            "mt-4 flex flex-col items-stretch gap-2 transition-opacity duration-700 ease-out sm:items-start",
+            ready ? "opacity-100" : "opacity-0",
+          )}
+          style={{ transitionDelay: "1s" }}
+        >
+          <Link
+            href="/pre-atendimento"
+            className="group inline-flex items-center justify-center gap-2.5 rounded-full bg-foreground px-8 py-4 text-sm font-medium tracking-wide text-background ring-1 ring-accent-text/30 transition-all duration-300 ease-out hover:bg-foreground/90 active:scale-[0.98] motion-reduce:transition-none motion-reduce:active:scale-100"
+          >
+            <span aria-hidden="true" className="text-accent-text">
+              ✨
+            </span>
+            Fazer pré-atendimento
+            <span
+              aria-hidden="true"
+              className="text-accent-text transition-transform duration-300 group-hover:translate-x-1 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0"
+            >
+              →
+            </span>
+          </Link>
+          <span className="text-xs text-foreground/50">Leva menos de 2 minutos.</span>
         </div>
       </div>
 
