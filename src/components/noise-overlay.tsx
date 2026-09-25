@@ -9,7 +9,8 @@ export function NoiseOverlay() {
   return (
     <svg
       aria-hidden="true"
-      className="pointer-events-none fixed inset-0 z-[1] h-full w-full opacity-[0.04]"
+      className="pointer-events-none fixed inset-0 z-[1] h-full w-full opacity-[0.04] will-change-transform"
+      style={{ transform: "translateZ(0)" }}
     >
       <filter id="noise-overlay-filter">
         <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch" />
