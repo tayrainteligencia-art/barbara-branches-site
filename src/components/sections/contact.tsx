@@ -6,10 +6,17 @@ import { ContactForm } from "@/components/contact-form";
 import { SectionLabel } from "@/components/section-label";
 import { useFadeUp } from "@/hooks/use-fade-up";
 
-// TODO(PENDENCIAS.md): endereço, telefone e horário reais da clínica.
+const ENDERECO = "Rua Mauriti, 2159 — Pedreira, Belém - PA, 66087-680";
+// URL final do embed (sem depender do redirect de /maps?q=...&output=embed,
+// que soma um hop a mais e não carrega de forma confiável dentro de um iframe).
+const MAPS_EMBED_SRC = `https://www.google.com/maps/embed?pb=!1m2!2m1!1s${encodeURIComponent(
+  `Nuclear Center Clínica de Diagnósticos por Imagens, ${ENDERECO}`,
+)}`;
+
+// TODO(PENDENCIAS.md): horário de funcionamento real da clínica.
 const info = [
-  { label: "Endereço", value: "TODO — endereço a confirmar" },
-  { label: "Telefone / WhatsApp", value: "TODO — telefone a confirmar" },
+  { label: "Endereço", value: ENDERECO },
+  { label: "Telefone", value: "(91) 3245-3397" },
   { label: "Horário de funcionamento", value: "TODO — horário a confirmar" },
 ];
 
@@ -30,11 +37,15 @@ export function Contact() {
           <div className="space-y-10">
             <motion.div
               {...fadeUp}
-              className="flex aspect-video w-full items-center justify-center rounded-2xl border border-dashed border-accent-text/50"
+              className="aspect-video w-full overflow-hidden rounded-2xl border border-border"
             >
-              <p className="font-sans text-xs italic text-foreground/50">
-                Mapa — endereço a confirmar
-              </p>
+              <iframe
+                src={MAPS_EMBED_SRC}
+                title="Localização — Bárbara Branches"
+                className="h-full w-full"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
             </motion.div>
 
             <motion.dl

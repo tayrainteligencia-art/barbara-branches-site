@@ -30,9 +30,9 @@ const Contact = dynamic(() => import("@/components/sections/contact").then((m) =
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
-// Dados estruturados com apenas os campos confirmados. Endereço, telefone e
-// horário ficam de fora até serem fornecidos (ver PENDENCIAS.md) — nunca
-// inventados. Tipo genérico LocalBusiness até o segmento exato da clínica
+// Dados estruturados com apenas os campos confirmados. Horário de
+// funcionamento fica de fora até ser fornecido (ver PENDENCIAS.md) — nunca
+// inventado. Tipo genérico LocalBusiness até o segmento exato da clínica
 // ser confirmado (ver BRAND_ANALYSIS.md, seção 6).
 const structuredData = {
   "@context": "https://schema.org",
@@ -43,6 +43,15 @@ const structuredData = {
   url: siteUrl,
   logo: `${siteUrl}/brand/logo-full.png`,
   image: `${siteUrl}/brand/logo-full.png`,
+  telephone: "+55 91 3245-3397",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "Rua Mauriti, 2159",
+    addressLocality: "Belém",
+    addressRegion: "PA",
+    postalCode: "66087-680",
+    addressCountry: "BR",
+  },
 };
 
 export default function Home() {
