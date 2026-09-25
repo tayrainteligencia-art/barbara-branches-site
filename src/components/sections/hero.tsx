@@ -1,75 +1,44 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import Image from "next/image";
-import gsap from "gsap";
+import dynamic from "next/dynamic";
+import Link from "next/link";
 import { SplitReveal } from "@/components/split-reveal";
+import { TextGenerateEffect } from "@/components/ui/text-generate-effect";
 import { usePreloaderReady } from "@/lib/preloader-context";
-import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { useMagnetic } from "@/hooks/use-magnetic";
 import { getWhatsAppLink } from "@/lib/whatsapp";
 import { cn } from "@/lib/utils";
 
+// Puramente decorativo (oculto no mobile, opacidade baixa) — não faz parte
+// do conteúdo crítico do Hero, então não precisa bloquear o bundle inicial.
+const ParallaxHeroImages = dynamic(() =>
+  import("@/components/ui/parallax-hero-images").then((m) => m.ParallaxHeroImages),
+);
+
 export function Hero() {
   const ready = usePreloaderReady();
-  const reducedMotion = useReducedMotion();
-  const sectionRef = useRef<HTMLElement>(null);
-  const iconRef = useRef<HTMLDivElement>(null);
 
   const whatsappHref = getWhatsAppLink();
   const primaryHref = whatsappHref ?? "#contato";
   const magneticRef = useMagnetic<HTMLAnchorElement>();
 
-  useEffect(() => {
-    if (reducedMotion) return;
-    const section = sectionRef.current;
-    const icon = iconRef.current;
-    if (!section || !icon) return;
-
-    const tween = gsap.to(icon, {
-      yPercent: 18,
-      ease: "none",
-      scrollTrigger: {
-        trigger: section,
-        start: "top top",
-        end: "bottom top",
-        scrub: true,
-      },
-    });
-
-    return () => {
-      tween.scrollTrigger?.kill();
-      tween.kill();
-    };
-  }, [reducedMotion]);
-
   return (
-    <section
-      ref={sectionRef}
-      className="relative flex min-h-[100svh] flex-col justify-center overflow-hidden bg-surface-dark px-6 text-cream sm:px-10 lg:px-20"
-    >
+    <section className="relative flex min-h-[100svh] flex-col justify-center overflow-hidden px-6 sm:px-10 lg:px-20">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_70%_25%,rgba(176,130,74,0.16),transparent_60%)]"
       />
 
-      <div
-        ref={iconRef}
-        aria-hidden="true"
-        className="pointer-events-none absolute -right-24 top-1/2 h-[520px] w-[520px] -translate-y-1/2 opacity-[0.14] sm:h-[640px] sm:w-[640px] lg:-right-16 lg:h-[760px] lg:w-[760px]"
-      >
-        <Image
-          src="/brand/icon.webp"
-          alt=""
-          fill
-          priority
-          sizes="760px"
-          className="object-contain"
-        />
-      </div>
+      {/* Sem fotos reais da clínica (ver PENDENCIAS.md): usa o símbolo da
+      marca como camada decorativa de parallax em vez de fotografia. */}
+      <ParallaxHeroImages
+        images={["/brand/icon.webp", "/brand/icon.webp", "/brand/icon.webp"]}
+        className="hidden sm:block"
+        imageClassName="!h-16 !w-16 md:!h-24 md:!w-24 rounded-full object-contain bg-transparent shadow-none ring-0 opacity-20"
+      />
 
       <div className="relative z-10 max-w-3xl">
-        <p className="mb-6 font-sans text-xs font-medium tracking-[0.35em] text-bronze-light uppercase">
+        <p className="mb-6 font-sans text-xs font-medium tracking-[0.35em] text-accent-text uppercase">
           Beleza · Ciência · Harmonia
         </p>
 
@@ -78,19 +47,19 @@ export function Hero() {
           text="Beleza que nasce do equilíbrio entre ciência e cuidado"
           mode="immediate"
           active={ready}
-          className="font-display text-4xl leading-[1.15] tracking-wide text-cream sm:text-5xl lg:text-6xl"
+          className="font-display text-4xl leading-[1.15] tracking-wide text-foreground sm:text-5xl lg:text-6xl"
         />
 
-        <p
-          className={cn(
-            "mt-8 max-w-xl text-balance font-sans text-base leading-relaxed text-cream/70 transition-opacity duration-700 ease-out sm:text-lg",
-            ready ? "opacity-100" : "opacity-0",
+        <div className="mt-8 max-w-xl min-h-[3.5rem] sm:min-h-[3rem]">
+          {ready && (
+            <TextGenerateEffect
+              words="Tratamentos estéticos personalizados, conduzidos com técnica e sensibilidade, para realçar a sua beleza natural."
+              duration={0.4}
+              staggerDelay={0.04}
+              className="text-balance text-base leading-relaxed text-foreground/70 sm:text-lg"
+            />
           )}
-          style={{ transitionDelay: "0.65s" }}
-        >
-          Tratamentos estéticos personalizados, conduzidos com técnica e
-          sensibilidade, para realçar a sua beleza natural.
-        </p>
+        </div>
 
         <div
           className={cn(
@@ -104,24 +73,49 @@ export function Hero() {
             href={primaryHref}
             target={whatsappHref ? "_blank" : undefined}
             rel={whatsappHref ? "noopener noreferrer" : undefined}
-            className="inline-flex items-center justify-center rounded-full bg-bronze px-8 py-4 text-sm font-medium tracking-wide text-surface-dark transition-colors duration-300 hover:bg-bronze-light"
+            className="inline-flex items-center justify-center rounded-full bg-accent-solid px-8 py-4 text-sm font-medium tracking-wide text-accent-solid-foreground transition-opacity duration-300 hover:opacity-90"
           >
             Agendar minha avaliação
           </a>
           <a
             href="#tratamentos"
-            className="inline-flex items-center justify-center rounded-full border border-cream/25 px-8 py-4 text-sm font-medium tracking-wide text-cream transition-colors duration-300 hover:border-cream/60"
+            className="inline-flex items-center justify-center rounded-full border border-foreground/25 px-8 py-4 text-sm font-medium tracking-wide text-foreground transition-colors duration-300 hover:border-foreground/60"
           >
             Ver tratamentos
           </a>
+        </div>
+
+        <div
+          className={cn(
+            "mt-4 flex flex-col items-stretch gap-2 transition-opacity duration-700 ease-out sm:items-start",
+            ready ? "opacity-100" : "opacity-0",
+          )}
+          style={{ transitionDelay: "1s" }}
+        >
+          <Link
+            href="/pre-atendimento"
+            className="group inline-flex items-center justify-center gap-2.5 rounded-full bg-foreground px-8 py-4 text-sm font-medium tracking-wide text-background ring-1 ring-accent-text/30 transition-all duration-300 ease-out hover:bg-foreground/90 active:scale-[0.98] motion-reduce:transition-none motion-reduce:active:scale-100"
+          >
+            <span aria-hidden="true" className="text-accent-text">
+              ✨
+            </span>
+            Fazer pré-atendimento
+            <span
+              aria-hidden="true"
+              className="text-accent-text transition-transform duration-300 group-hover:translate-x-1 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0"
+            >
+              →
+            </span>
+          </Link>
+          <span className="text-xs text-foreground/50">Leva menos de 2 minutos.</span>
         </div>
       </div>
 
       <div
         aria-hidden="true"
-        className="absolute bottom-8 left-6 flex items-center gap-3 text-cream/40 sm:left-10 lg:left-20"
+        className="absolute bottom-8 left-6 flex items-center gap-3 text-foreground/40 sm:left-10 lg:left-20"
       >
-        <span className="h-10 w-px bg-cream/20" />
+        <span className="h-10 w-px bg-border" />
         <span className="text-[10px] font-medium tracking-[0.3em] uppercase">
           Role para conhecer
         </span>

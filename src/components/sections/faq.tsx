@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { SplitReveal } from "@/components/split-reveal";
+import { SectionLabel } from "@/components/section-label";
 
 const faqs = [
   {
@@ -35,25 +36,23 @@ export function Faq() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section id="faq" className="bg-cream-deep py-24 sm:py-32">
+    <section id="faq" className="border-t border-border py-24 md:py-40">
       <div className="mx-auto max-w-3xl px-6 sm:px-10 lg:px-8">
-        <p className="mb-6 font-sans text-xs font-medium tracking-[0.35em] text-bronze uppercase">
-          Perguntas frequentes
-        </p>
+        <SectionLabel number="08" title="Perguntas frequentes" />
         <SplitReveal
           as="h2"
           text="Dúvidas comuns antes de agendar"
-          className="font-display text-3xl leading-[1.2] tracking-wide text-ink sm:text-4xl"
+          className="font-display text-3xl leading-[1.2] tracking-wide text-foreground sm:text-4xl"
         />
 
-        <div className="mt-12 border-t border-cream-line">
+        <div className="mt-12 border-t border-border">
           {faqs.map((faq, index) => {
             const isOpen = openIndex === index;
             const panelId = `faq-panel-${index}`;
             const buttonId = `faq-button-${index}`;
 
             return (
-              <div key={faq.question} className="border-b border-cream-line">
+              <div key={faq.question} className="border-b border-border">
                 <h3>
                   <button
                     id={buttonId}
@@ -63,12 +62,12 @@ export function Faq() {
                     onClick={() => setOpenIndex(isOpen ? null : index)}
                     className="flex w-full items-center justify-between gap-4 py-6 text-left"
                   >
-                    <span className="font-display text-lg tracking-wide text-ink sm:text-xl">
+                    <span className="font-display text-lg tracking-wide text-foreground sm:text-xl">
                       {faq.question}
                     </span>
                     <span
                       aria-hidden="true"
-                      className="relative h-4 w-4 shrink-0 text-bronze"
+                      className="relative h-4 w-4 shrink-0 text-accent-text"
                     >
                       <span className="absolute inset-y-1/2 left-0 h-px w-4 -translate-y-1/2 bg-current" />
                       <span
@@ -87,7 +86,7 @@ export function Faq() {
                   style={{ gridTemplateRows: isOpen ? "1fr" : "0fr" }}
                 >
                   <div className="overflow-hidden">
-                    <p className="max-w-xl pb-6 font-sans text-sm leading-relaxed text-ink-soft/75 sm:text-base">
+                    <p className="max-w-xl pb-6 font-sans text-sm leading-relaxed text-foreground/75 sm:text-base">
                       {faq.answer}
                     </p>
                   </div>

@@ -1,5 +1,152 @@
 # Progresso do projeto
 
+## Merge redesign/portfolio → main (2026-09-24)
+`main` tinha avançado, em paralelo ao redesign, para deploy estático via
+GitHub Actions/cPanel (Hostgator não tem Node.js): `output: "export"` no
+next.config.ts, rota `/api/contact` removida, formulário de contato reescrito
+para abrir o WhatsApp direto em vez de chamar uma API própria. O merge trouxe
+o redesign inteiro para cima dessa infraestrutura, com um único conflito real
+(`contact-form.tsx`, resolvido combinando o comportamento novo — sem API, sem
+campo de e-mail — com o visual/tokens do redesign).
+- Bug real descoberto e corrigido durante a validação: o link
+  `wa.me/message/<código>` (formato de link de mensagem do WhatsApp Business)
+  **não preserva `?text=`** — testado via curl e Playwright, o redirect do
+  WhatsApp descarta o parâmetro. Só o formato `wa.me/<número>?text=…` (que
+  exige o número em dígitos, que não temos) pré-preenche de verdade. Corrigido
+  com fallback de copiar a mensagem para a área de transferência
+  (`copyWhatsAppMessage` em `lib/whatsapp.ts`) antes de abrir o link, usado no
+  formulário de contato e no chat de pré-atendimento — testado ponta a ponta,
+  mensagem chega certa na área de transferência.
+- Workflow `deploy-cpanel.yml` atualizado: a secret que ele injeta no build
+  mudou de nome, de `NEXT_PUBLIC_WHATSAPP_NUMBER` para
+  `NEXT_PUBLIC_WHATSAPP_LINK` (nome usado pelo código atual). Não tenho acesso
+  às GitHub Secrets do repositório — se quiser sobrescrever o link padrão
+  (já correto, confirmado nesta sessão) por secret, crie
+  `NEXT_PUBLIC_WHATSAPP_LINK` nas configurações do repositório.
+- Build de export estático (`npm run build` com `output: "export"`) validado
+  localmente: todas as rotas geradas (`/`, `/pre-atendimento`,
+  `/politica-de-privacidade`), servidas via `serve out` (sem `-s`, que quebra
+  rotas estáticas multi-página — descoberto durante a validação) e checadas
+  em 375/768/1440px, claro/escuro, sem erros de console/overflow/imagens
+  quebradas. Lighthouse do export estático: **88/97/100/100** (melhor que os
+  79/97/100/100 medidos antes do merge, rodando via `next dev`/`next start`).
+
+## Dados reais recebidos (2026-09-24)
+Primeira leva de dados reais da clínica, aplicada nesta sessão:
+- Fotos: Dra. Bárbara (seção Profissional) e 1 foto de procedimento em sala de
+  atendimento (seção Estrutura) — otimizadas em `public/images/`. Duas fotos de
+  antes/depois recebidas junto não foram publicadas (pendência regulatória, ver
+  PENDENCIAS.md) e foram apagadas por engano ao organizar os arquivos — avisado
+  ao cliente, arquivos originais provavelmente recuperáveis no WhatsApp de origem.
+- WhatsApp: link de mensagem confirmado (`wa.me/message/QDEZWMLPXOTUL1`), agora
+  base de `src/lib/whatsapp.ts` — usado no botão flutuante, CTAs e no chat de
+  pré-atendimento (que ganhou uma pergunta de nome para compor a mensagem final).
+- Endereço/telefone/CNPJ: resolvidos a partir do link curto do Google Maps + CNPJ
+  fornecido (consulta pública à Receita Federal) — Nuclear Center Clínica de
+  Diagnósticos por Imagens LTDA, Rua Mauriti 2159, Pedreira, Belém-PA. Já no
+  rodapé, na seção de Contato (com mapa embutido) e no JSON-LD.
+- CRM 6831 da Dra. Bárbara Branches — já na seção Profissional e no rodapé.
+- E-mail atendimento@drabarbarabranches.com.br — no rodapé (caixa ainda não ativa).
+- Nova página `/politica-de-privacidade`: modelo LGPD, banner deixando claro que
+  precisa de revisão jurídica antes de publicação definitiva; link no rodapé.
+- Lighthouse após essas mudanças: performance **79** (linha de base do redesign
+  era 74 — sem regressão, dentro da variação normal de execuções headless) /
+  acessibilidade 97 / boas práticas 100 / SEO 100 (`.lighthouse/report-redesign4.json`).
+- Bug real encontrado e corrigido nesta sessão: rodapé estourava a largura da
+  tela em 768px (e-mail longo sem quebra de linha + barra inferior sem
+  wrap) — corrigido com `break-all` no e-mail e `flex-wrap` na barra do CNPJ/CRM.
+
+## Redesign Portfólio (branch `redesign/portfolio`)
+Estado: **Etapa 3 concluída — redesign pronto para revisão**, na branch
+`redesign/portfolio` (não mesclado na `main`).
+
+### Item 6 — Etapa 3 (final)
+- `AUDITORIA_CONVERSAO.md`: sem dados de tráfego ainda; achados por princípios
+  (ver arquivo) — nada bloqueante, 2 itens dependem de dados que faltam
+- Lint e build de produção sem erros; validação de marco final (375/768/1440,
+  claro/escuro, reduced-motion) sem erros de console/overflow/imagens quebradas
+- Lighthouse: baseline 77/96/100/100 → redesign final **74/97/100/100**
+  (performance) — caiu para 68 logo após o redesign (todo o JS das seções
+  carregava de uma vez), recuperado para 74 com `next/dynamic` nas seções
+  abaixo do Hero, no Footer, no Navbar e no parallax decorativo do Hero
+- Gap restante (74 vs. 77): o preloader ocupa a tela por ~1,15s (dentro do
+  limite de 1,5s do projeto original) e isso atrasa o LCP do texto por trás —
+  decisão registrada em PENDENCIAS.md para você validar
+- CTA do meio da página (previsto no plano) tinha ficado de fora — adicionado
+  nesta etapa
+- Não fiz deploy na Vercel — sem acesso à sua conta. Se o projeto já estiver
+  conectado ao GitHub, um preview da branch `redesign/portfolio` deve aparecer
+  automaticamente no seu painel Vercel
+
+### Item 1 — tokens + next-themes + toggle
+- Tokens únicos background/foreground/accent-text/accent-solid nos 2 temas, contraste
+  AA verificado (ver PLANO_REDESIGN.md)
+- Toggle com view-transition circular + fallback instantâneo; validado 375/768/1440,
+  claro/escuro, reduced-motion — sem erros de console
+- Tokens antigos (cream/ink/bronze/surface-dark) removidos do CSS — seções ainda os
+  referenciam até o item 2 (próximo commit corrige)
+
+### Item 2 — fundo único + remoção de cor por seção
+- Todas as seções usam só background/foreground/accent-text/accent-solid/border;
+  hero deixou de ser bloco escuro fixo e agora segue o tema (validado claro/escuro)
+- Divisores: `border-t border-border` + `SectionLabel` ("0N — Nome") + py-24 md:py-40
+- `scripts/check.mjs` precisava de mais espera pós-scroll/load (preloader + reveal
+  animados) — screenshots antes disso pegavam animação pela metade, não é bug real
+
+### Item 3 — Navbar
+- `shadcn init` sobrescreveu lib/utils.ts e globals.css com o preset "Nova" (parei e
+  perguntei, conforme regra 3) — revertidos, mantido só components.json
+- floating-navbar instalado e adaptado: tokens da marca, PT-BR, logo+toggle no pill,
+  reduced-motion (duração 0)
+- Migrado framer-motion → motion/react em todas as seções; framer-motion removido
+
+### Item 4 — Hero
+- ParallaxHeroImages (ícone da marca, sem fotos) + TextGenerateEffect no subtítulo;
+  headline continua em SplitReveal (transform) para proteger o LCP
+- staggerDelay do TextGenerateEffect: 0.2s padrão era lento demais (~3s p/ frase de
+  14 palavras) — reduzido para 0.04s nesta seção
+- 3º bug de reduced-motion (mesma causa raiz): ParallaxImage com initial/animate
+  virando `undefined` prendia opacity/scale — corrigido com valores sempre explícitos
+
+### Item 5 — demais seções
+- Sobre: TextGenerateEffect ganhou prop `play` (sempre montado, sem CLS; anima só
+  quando `useInView`)
+- Tratamentos: Focus Cards sem fotos reais — texto sempre visível, foco/hover só
+  realça um card e borra os outros; acessível por teclado (tabIndex+onFocus/onBlur)
+- Diferenciais: Sticky Scroll Reveal original usava container com overflow interno
+  (conflita com Lenis) — reescrito para rastrear o scroll da página; gradientes
+  genéricos trocados por token accent-text
+- Estrutura: Layout Grid sem fotos reais — placeholders tracejados; virou modal de
+  verdade (Esc fecha, foco retorna ao card, botões em vez de divs)
+- Depoimentos: Animated Testimonials sem depoimentos/fotos reais — ícone de aspas +
+  "a confirmar"; removido @tabler/icons-react (não usado)
+- Opcionais: Container Text Flip (CTA final) e Stateful Button (form) corrigidos e
+  usados; Timeline e Noise Background (Aceternity) descartados — ver commit
+  "componentes opcionais" para o porquê de cada um
+- 4º bug de reduced-motion, categoria nova: Container Text Flip tinha `<div>` dentro
+  de `<p>` (HTML inválido, herdado do template original) causando hydration error
+  em todo carregamento — corrigido trocando a tag raiz para `<div>`
+
+### Diagnóstico
+- Versões: next@16.3.5, react@19.2.8, tailwindcss@4.3.3, framer-motion@13.2.0,
+  gsap@3.15.0, lenis@1.3.26 — `motion` não instalado ainda (framer-motion legado)
+- `components.json` não existe — `npx shadcn@latest init` será necessário
+- Lighthouse baseline (build de produção): performance 77, accessibility 96,
+  best-practices 100, seo 100 (`.lighthouse/report.json`)
+- Componentes Aceternity confirmados no registry (nomes exatos):
+  - Uso obrigatório: floating-navbar, parallax-hero-images, focus-cards,
+    layout-grid, text-generate-effect, sticky-scroll-reveal, animated-testimonials
+  - Opcionais: resizable-navbar, images-slider, direction-aware-hover,
+    parallax-scroll, apple-cards-carousel, timeline, container-text-flip,
+    animated-modal, stateful-button, noise-background
+  - "Expandable Card" = `expandable-card-on-click` (tipo block, não ui)
+  - Restrito (pedir aprovação): compare
+
+### Decisões (1 linha cada)
+- Dev server parado antes do build de produção do Lighthouse e reiniciado depois,
+  para não conflitar na porta 3000.
+
+
 ## Etapa atual
 Etapa 3 concluída (todas as 13 seções + SEO/performance). Próximo: Etapa 4
 (auditoria de conversão completa).

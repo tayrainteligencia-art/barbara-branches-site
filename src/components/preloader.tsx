@@ -49,7 +49,7 @@ export function Preloader() {
     <div
       ref={rootRef}
       aria-hidden="true"
-      className="fixed inset-0 z-[100] flex flex-col items-center justify-center gap-6 bg-surface-dark"
+      className="fixed inset-0 z-[100] flex flex-col items-center justify-center gap-6 bg-background"
     >
       <div ref={iconRef} className="h-16 w-16">
         <Image
@@ -61,10 +61,10 @@ export function Preloader() {
           className="h-full w-full object-contain"
         />
       </div>
-      <div className="h-px w-32 overflow-hidden bg-white/10">
+      <div className="h-px w-32 overflow-hidden bg-border">
         <div
           ref={barRef}
-          className="h-full w-full origin-left scale-x-0 bg-bronze"
+          className="h-full w-full origin-left scale-x-0 bg-accent-solid"
         />
       </div>
     </div>

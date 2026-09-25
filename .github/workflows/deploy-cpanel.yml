@@ -24,7 +24,7 @@ jobs:
       - name: Build static export
         env:
           NEXT_PUBLIC_SITE_URL: ${{ secrets.NEXT_PUBLIC_SITE_URL }}
-          NEXT_PUBLIC_WHATSAPP_NUMBER: ${{ secrets.NEXT_PUBLIC_WHATSAPP_NUMBER }}
+          NEXT_PUBLIC_WHATSAPP_LINK: ${{ secrets.NEXT_PUBLIC_WHATSAPP_LINK }}
           NEXT_PUBLIC_WHATSAPP_MESSAGE: ${{ secrets.NEXT_PUBLIC_WHATSAPP_MESSAGE }}
         run: npm run build
 

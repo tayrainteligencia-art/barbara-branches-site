@@ -44,3 +44,4 @@ next-env.d.ts
 
 # screenshots de validação visual (web-frontend-tester)
 .screenshots/
+.lighthouse/
