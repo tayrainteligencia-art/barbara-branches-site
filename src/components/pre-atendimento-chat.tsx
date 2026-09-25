@@ -5,10 +5,7 @@ import Link from "next/link";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
-
-// PROTÓTIPO — número placeholder até a clínica confirmar o WhatsApp real
-// (ver PENDENCIAS.md). Em produção isso viria de NEXT_PUBLIC_WHATSAPP_NUMBER.
-const WHATSAPP_NUMERO_TODO = "5500000000000";
+import { getWhatsAppLink } from "@/lib/whatsapp";
 
 // DEMONSTRATIVO — mesma lista ilustrativa usada em treatments.tsx; a lista
 // oficial de tratamentos será confirmada com a clínica (ver PENDENCIAS.md).
@@ -57,6 +54,7 @@ function contemAlerta(texto: string) {
 type Msg = { role: "bot" | "user"; text: string };
 
 type Respostas = {
+  nome: string;
   interesse: string;
   objetivo: string;
   jaRealizou: string;
@@ -67,6 +65,7 @@ type Respostas = {
 
 type Step =
   | "intro"
+  | "nome"
   | "interesse"
   | "objetivo"
   | "ja_realizou"
@@ -77,23 +76,21 @@ type Step =
   | "resumo";
 
 function montarLinkWhatsApp(r: Respostas) {
-  const numero = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || WHATSAPP_NUMERO_TODO;
   const texto = [
-    "Olá! Acabei de concluir meu pré-atendimento pelo site da Barbara Branches. ✨",
+    `Olá, meu nome é ${r.nome} e tenho interesse no procedimento ${r.interesse}.`,
     "",
-    `Interesse: ${r.interesse}`,
     `Objetivo: ${r.objetivo}`,
     `Quando pretendo realizar: ${r.prazo}`,
     "",
     "Gostaria de continuar meu atendimento.",
   ].join("\n");
-  return `https://wa.me/${numero}?text=${encodeURIComponent(texto)}`;
+  return getWhatsAppLink(texto);
 }
 
 function montarLinkWhatsAppAlerta() {
-  const numero = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || WHATSAPP_NUMERO_TODO;
-  const texto = "Olá! Estou com uma dúvida após um procedimento e gostaria de falar com a equipe.";
-  return `https://wa.me/${numero}?text=${encodeURIComponent(texto)}`;
+  return getWhatsAppLink(
+    "Olá! Estou com uma dúvida após um procedimento e gostaria de falar com a equipe.",
+  );
 }
 
 function Bubble({ role, text }: Msg) {
@@ -181,6 +178,7 @@ export function PreAtendimentoChat() {
   const [step, setStep] = useState<Step>("intro");
   const [messages, setMessages] = useState<Msg[]>([]);
   const [respostas, setRespostas] = useState<Respostas>({
+    nome: "",
     interesse: "",
     objetivo: "",
     jaRealizou: "",
@@ -215,8 +213,17 @@ export function PreAtendimentoChat() {
         text: "Posso fazer algumas perguntas rápidas para entender melhor o que você procura?",
       },
       { role: "bot", text: "Leva menos de 2 minutos." },
-      { role: "bot", text: "O que você gostaria de melhorar hoje?" },
+      { role: "bot", text: "Antes de começar, como posso te chamar?" },
     ]);
+    setStep("nome");
+  }
+
+  function enviarNome(texto: string) {
+    if (!texto.trim()) return;
+    addUser(texto);
+    setRespostas((r) => ({ ...r, nome: texto }));
+    setRascunho("");
+    addBot([`Prazer, ${texto}! O que você gostaria de melhorar hoje?`]);
     setStep("interesse");
   }
 
@@ -329,6 +336,15 @@ export function PreAtendimentoChat() {
 
           {!completed && (
             <div className="flex flex-col gap-3">
+              {step === "nome" && (
+                <TextComposer
+                  value={rascunho}
+                  onChange={setRascunho}
+                  onSubmit={() => enviarNome(rascunho)}
+                  placeholder="Seu nome"
+                />
+              )}
+
               {step === "interesse" && (
                 <>
                   <div className="flex flex-wrap gap-2.5">
@@ -422,6 +438,7 @@ export function PreAtendimentoChat() {
                   Seu pré-atendimento
                 </p>
                 <dl className="flex flex-col gap-5">
+                  <SummaryRow label="Nome" value={respostas.nome} />
                   <SummaryRow label="Interesse" value={respostas.interesse} />
                   <SummaryRow label="Objetivo" value={respostas.objetivo} />
                   <SummaryRow

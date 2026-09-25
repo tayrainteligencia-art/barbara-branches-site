@@ -1,17 +1,14 @@
+const DEFAULT_LINK = "https://wa.me/message/QDEZWMLPXOTUL1";
 const DEFAULT_MESSAGE = "Olá! Gostaria de agendar uma avaliação.";
 
 /**
- * Monta o link wa.me a partir das variáveis de ambiente.
- * Sem NEXT_PUBLIC_WHATSAPP_NUMBER definido, retorna null — quem consome
- * decide como lidar com a ausência (ex.: ocultar o botão) em vez de linkar
- * para um número inexistente.
+ * Monta o link do WhatsApp a partir do link de mensagem confirmado pela
+ * clínica (NEXT_PUBLIC_WHATSAPP_LINK sobrescreve o padrão, se definido).
  */
-export function getWhatsAppLink(message?: string): string | null {
-  const number = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER;
-  if (!number) return null;
-
+export function getWhatsAppLink(message?: string): string {
+  const base = process.env.NEXT_PUBLIC_WHATSAPP_LINK ?? DEFAULT_LINK;
   const text = encodeURIComponent(
     message ?? process.env.NEXT_PUBLIC_WHATSAPP_MESSAGE ?? DEFAULT_MESSAGE,
   );
-  return `https://wa.me/${number}?text=${text}`;
+  return `${base}?text=${text}`;
 }
