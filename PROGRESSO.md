@@ -1,5 +1,26 @@
 # Progresso do projeto
 
+## HTTPS forçado + HSTS (2026-09-24, branch `redesign/portfolio`)
+Pedido original sugeria `middleware.ts` ou `headers()`/`redirects()` no
+`next.config.ts` como fallback sem acesso à camada de servidor. Nenhum dos
+dois funciona aqui: o site é `output: "export"` (export estático, sem
+servidor Next.js em produção) — middleware e `headers()`/`redirects()` são
+ignorados nesse modo. Implementado em `public/.htaccess` (Apache, o que o
+cPanel/Hostgator realmente usa), que o build copia para `out/.htaccess` e o
+workflow já existente sobe via rsync — sem mudança no pipeline. Cobre tanto
+Apache terminando TLS direto quanto atrás de um proxy que só repassa
+`X-Forwarded-Proto` (não sei qual é o caso exato no plano do Hostgator).
+- Validado: `npm run dev` sem travamento/loop (o `.htaccess` não afeta o
+  Next.js localmente, só o Apache em produção); build de export gera
+  `out/.htaccess` idêntico ao de `public/`; lint sem erros novos.
+- **Não validado**: redirect HTTP→HTTPS e header HSTS reais — isso só
+  acontece no Apache do servidor, e não tenho acesso a ele nem a um
+  ambiente de preview. Só é verificável depois que isso chegar a `main` e
+  passar pelo deploy automático (`curl -I http://<domínio>` deve devolver
+  308 com `Location: https://…`, e `curl -sI https://<domínio> | grep
+  -i strict-transport-security` deve mostrar o header).
+- HSTS sem `preload` de propósito (pedido explicitamente) — reversível.
+
 ## Merge redesign/portfolio → main (2026-09-24)
 `main` tinha avançado, em paralelo ao redesign, para deploy estático via
 GitHub Actions/cPanel (Hostgator não tem Node.js): `output: "export"` no

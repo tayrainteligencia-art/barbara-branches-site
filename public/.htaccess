@@ -1,0 +1,14 @@
+# Força HTTPS em todo o site e envia HSTS nas respostas.
+# Cobre tanto Apache terminando TLS diretamente (%{HTTPS}) quanto um proxy
+# na frente que só repassa X-Forwarded-Proto — cPanel/Hostgator pode usar
+# qualquer um dos dois dependendo do plano, então checamos os dois.
+RewriteEngine On
+RewriteCond %{HTTPS} !=on
+RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=308]
+
+# HSTS: max-age conservador (1 ano) para começar, sem preload — preload é
+# difícil de reverter depois que o domínio entra na lista dos navegadores.
+<IfModule mod_headers.c>
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+</IfModule>
