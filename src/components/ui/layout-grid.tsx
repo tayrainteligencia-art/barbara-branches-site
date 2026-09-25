@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import Image from "next/image";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
 
@@ -8,6 +9,7 @@ type Card = {
   label: string;
   content: ReactNode;
   className: string;
+  image?: { src: string; alt: string };
 };
 
 const PlaceholderIcon = () => (
@@ -58,15 +60,33 @@ export const LayoutGrid = ({ cards }: { cards: Card[] }) => {
           aria-haspopup="dialog"
           className={cn(
             card.className,
-            "group relative overflow-hidden rounded-xl border border-dashed border-accent-text/50 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-text",
+            "group relative overflow-hidden rounded-xl text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-text",
+            card.image ? "border border-border" : "border border-dashed border-accent-text/50",
           )}
         >
-          <div className="flex h-full w-full flex-col items-center justify-center gap-3 p-6 text-center">
-            <PlaceholderIcon />
-            <p className="font-sans text-xs italic text-foreground/50">
-              Foto: {card.label} — a confirmar
-            </p>
-          </div>
+          {card.image ? (
+            <>
+              <Image
+                src={card.image.src}
+                alt={card.image.alt}
+                fill
+                sizes="(min-width: 768px) 33vw, 100vw"
+                className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+              />
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent p-4">
+                <p className="font-sans text-xs font-medium tracking-[0.2em] text-white uppercase">
+                  {card.label}
+                </p>
+              </div>
+            </>
+          ) : (
+            <div className="flex h-full w-full flex-col items-center justify-center gap-3 p-6 text-center">
+              <PlaceholderIcon />
+              <p className="font-sans text-xs italic text-foreground/50">
+                Foto: {card.label} — a confirmar
+              </p>
+            </div>
+          )}
         </button>
       ))}
 
@@ -86,7 +106,19 @@ export const LayoutGrid = ({ cards }: { cards: Card[] }) => {
             onClick={(event) => event.stopPropagation()}
             className="relative flex w-full max-w-lg flex-col items-center gap-4 rounded-2xl border border-border bg-background p-10 text-center"
           >
-            <PlaceholderIcon />
+            {selected.image ? (
+              <div className="relative h-56 w-full overflow-hidden rounded-xl">
+                <Image
+                  src={selected.image.src}
+                  alt={selected.image.alt}
+                  fill
+                  sizes="32rem"
+                  className="object-cover"
+                />
+              </div>
+            ) : (
+              <PlaceholderIcon />
+            )}
             <p className="font-display text-xl tracking-wide text-foreground">
               {selected.label}
             </p>

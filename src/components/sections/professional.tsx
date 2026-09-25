@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "motion/react";
 import { SplitReveal } from "@/components/split-reveal";
 import { SectionLabel } from "@/components/section-label";
@@ -13,24 +14,15 @@ export function Professional() {
       <div className="mx-auto grid max-w-6xl gap-16 px-6 sm:px-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-center lg:gap-16 lg:px-8">
         <motion.div
           {...fadeUp}
-          className="relative mx-auto aspect-[4/5] w-full max-w-sm rounded-[2rem] border border-dashed border-accent-text/50"
+          className="relative mx-auto aspect-[4/5] w-full max-w-sm overflow-hidden rounded-[2rem] border border-border"
         >
-          <div className="flex h-full w-full flex-col items-center justify-center gap-4 p-8 text-center">
-            <svg
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-              className="h-14 w-14 text-accent-text/50"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1"
-            >
-              <circle cx="12" cy="8" r="4" />
-              <path d="M4 20c1.5-4 4.5-6 8-6s6.5 2 8 6" />
-            </svg>
-            <p className="font-sans text-xs italic text-foreground/50">
-              Foto do profissional responsável — a confirmar
-            </p>
-          </div>
+          <Image
+            src="/images/doutora/dra-barbara-branches.jpg"
+            alt="Dra. Bárbara Branches"
+            fill
+            sizes="(min-width: 1024px) 24rem, 90vw"
+            className="object-cover"
+          />
         </motion.div>
 
         <div>
@@ -46,10 +38,12 @@ export function Professional() {
             className="mt-8 max-w-lg rounded-xl border border-dashed border-accent-text/50 p-6"
           >
             <p className="font-display text-xl tracking-wide text-foreground/70">
-              [Nome do profissional] — TODO
+              Dra. Bárbara Branches
             </p>
-            <p className="mt-2 font-sans text-sm text-foreground/60">
-              TODO: especialidade e registro profissional (CRM/CRO/RQE)
+            <p className="mt-2 font-sans text-sm text-foreground/60">CRM 6831</p>
+            <p className="mt-1 font-sans text-xs italic text-foreground/45">
+              TODO: especialidade completa e demais registros (CRO/RQE, se
+              aplicável) a confirmar
             </p>
             <p className="mt-4 font-sans text-sm italic leading-relaxed text-foreground/55">
               TODO: biografia profissional (formação, experiência e

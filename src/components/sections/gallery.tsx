@@ -17,6 +17,10 @@ const spaces = [
     label: "Sala de atendimento",
     className: "aspect-[4/3]",
     content: "Ambiente equipado para cada etapa do seu tratamento.",
+    image: {
+      src: "/images/procedimentos/procedimento-clinica.jpg",
+      alt: "Procedimento sendo realizado em sala de atendimento da clínica",
+    },
   },
   {
     id: 3,
