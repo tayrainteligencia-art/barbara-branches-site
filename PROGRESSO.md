@@ -30,6 +30,21 @@ mesmo sem conseguir confirmar no dispositivo real:
   `Sticky Scroll Reveal` da seção Diferenciais (pin via GSAP ScrollTrigger,
   categoria de animação historicamente pesada no iOS).
 
+## 403 em acesso direto às rotas (2026-10-07)
+Confirmado em produção: `/pre-agendamento` e `/politica-de-privacidade`
+davam 301 para a forma com barra e então **403** (o export gera `rota.html` +
+pasta `rota/` sem `index.html`). Corrigido no `public/.htaccess` com uma regra
+que serve `rota.html` em `/rota/`. O Apache continua redirecionando `/rota` →
+`/rota/` (mod_dir age antes do mod_rewrite), então a forma com barra é a
+canônica; o redirect da URL antiga do formulário já aponta para
+`/pre-agendamento/` (um salto só). Sem `DirectorySlash Off` de propósito
+(exigiria AllowOverride Indexes; se o host não permitir, 500 no site todo).
+- Validado em Apache 2.4 real (container `httpd:2.4`, AllowOverride All, sem
+  Indexes) servindo o `out/`: rotas com barra 200, sem barra 301 → barra,
+  arquivos `.txt` do Next 200, inexistente 404, pastas de assets 403, URL
+  antiga 301 direto (com query string), `/.well-known/` fora do redirect,
+  HSTS presente; navegador sem erros, formulário hidratado.
+
 ## Botões de WhatsApp quebrados em produção (2026-10-07)
 Em produção, todos os botões de WhatsApp (flutuante, navbar, hero, CTAs,
 rodapé, formulário de contato) apontavam para `https://<site>/?text=` — o
@@ -86,11 +101,7 @@ sem barra e `.html`, num único salto direto para https.
     antigos (ver PENDENCIAS.md);
   - registros antigos deste arquivo mantêm o termo antigo como histórico;
   - sábado incluído nos dias, a confirmar com o horário de funcionamento;
-  - o export gera `rota.html` + pasta `rota/` sem `index.html`; no Apache,
-    acesso direto/F5 em `/pre-agendamento` e `/politica-de-privacidade`
-    provavelmente cai em 301→barra + 403. Testar em produção com
-    `curl -I https://<domínio>/politica-de-privacidade`; correção sugerida via
-    `.htaccess` (`DirectorySlash Off` + servir `.html`).
+  - ~~403 em acesso direto às rotas no Apache~~ — resolvido (ver acima).
 - Testar após o deploy:
   `curl -I http://<domínio>/pre-atendimento` (301 → https://<domínio>/pre-agendamento,
   um salto), `curl -I https://<domínio>/pre-atendimento/` (301) e
