@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
-import { PreAtendimentoChat } from "@/components/pre-atendimento-chat";
+import { PreAgendamentoChat } from "@/components/pre-agendamento-chat";
 
-// Protótipo demonstrativo — sem indexação, sem persistência, sem backend.
-// Ver PROGRESSO.md/PENDENCIAS.md; dados usados aqui são mockados/DEMONSTRATIVOS.
+// Sem indexação e fora do sitemap. Sem backend: as respostas ficam só no
+// estado do componente e saem apenas na mensagem enviada pelo WhatsApp.
 export const metadata: Metadata = {
-  title: "Pré-atendimento",
+  title: "Pré-agendamento",
   robots: { index: false, follow: false },
 };
 
-export default function PreAtendimentoPage() {
-  return <PreAtendimentoChat />;
+export default function PreAgendamentoPage() {
+  return <PreAgendamentoChat />;
 }
