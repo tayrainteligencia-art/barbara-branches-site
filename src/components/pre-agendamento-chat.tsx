@@ -5,7 +5,7 @@ import Link from "next/link";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
-import { getWhatsAppSendLink } from "@/lib/whatsapp";
+import { getWhatsAppLink } from "@/lib/whatsapp";
 import {
   DIAS,
   PROCEDIMENTO,
@@ -35,7 +35,7 @@ const MENSAGEM_PACIENTE = "Olá! Já sou paciente e preciso de ajuda.";
 // clique (gesto do usuário), então não é barrado como pop-up. O link é montado
 // só na hora: CPF e telefone não ficam em nenhum atributo do DOM.
 function abrirWhatsApp(mensagem: string) {
-  window.open(getWhatsAppSendLink(mensagem), "_blank", "noopener,noreferrer");
+  window.open(getWhatsAppLink(mensagem), "_blank", "noopener,noreferrer");
 }
 
 const ORDEM = ["nome", "telefone", "cpf", "disponibilidade"] as const;
@@ -307,7 +307,7 @@ export function PreAgendamentoChat() {
 
   const linkJaSouPaciente = (
     <a
-      href={getWhatsAppSendLink(MENSAGEM_PACIENTE)}
+      href={getWhatsAppLink(MENSAGEM_PACIENTE)}
       target="_blank"
       rel="noopener noreferrer"
       className={linkPaciente}

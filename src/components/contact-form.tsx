@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { getWhatsAppLink, copyWhatsAppMessage } from "@/lib/whatsapp";
+import { getWhatsAppLink } from "@/lib/whatsapp";
 import { Button as StatefulButton } from "@/components/ui/stateful-button";
 
 type Status = { state: "idle" } | { state: "error"; message: string };
@@ -45,7 +45,6 @@ export function ContactForm() {
     }
 
     const texto = buildWhatsAppMessage({ name, phone, message });
-    copyWhatsAppMessage(texto);
     window.open(getWhatsAppLink(texto), "_blank", "noopener,noreferrer");
     form.reset();
     setStatus({ state: "idle" });
@@ -107,8 +106,7 @@ export function ContactForm() {
         Enviar pelo WhatsApp
       </StatefulButton>
       <p className="font-sans text-xs text-foreground/45">
-        Vamos abrir o WhatsApp com sua mensagem copiada — se não colar sozinha, é só apertar
-        Ctrl+V (ou ⌘V) no campo de texto.
+        Vamos abrir o WhatsApp com sua mensagem já escrita — é só enviar.
       </p>
 
       {status.state === "error" && (
