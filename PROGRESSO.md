@@ -30,6 +30,22 @@ mesmo sem conseguir confirmar no dispositivo real:
   `Sticky Scroll Reveal` da seção Diferenciais (pin via GSAP ScrollTrigger,
   categoria de animação historicamente pesada no iOS).
 
+## Botões de WhatsApp quebrados em produção (2026-10-07)
+Em produção, todos os botões de WhatsApp (flutuante, navbar, hero, CTAs,
+rodapé, formulário de contato) apontavam para `https://<site>/?text=` — o
+próprio site. Causa: o workflow injetava `secrets.NEXT_PUBLIC_WHATSAPP_LINK`,
+que não existe, como string vazia, e `getWhatsAppLink` usava `??` (só cai no
+padrão com `undefined`). Corrigido:
+- `getWhatsAppLink` agora gera `wa.me/559193754555?text=…` (abre direto, com
+  a mensagem preenchida) e usa `||` para variáveis vazias. Saiu a cópia para
+  a área de transferência e o aviso de Ctrl+V do formulário de contato.
+- Removido do workflow o `NEXT_PUBLIC_WHATSAPP_LINK` (não usado mais). A
+  secret `NEXT_PUBLIC_WHATSAPP_NUMBER` existe desde 2026-09-22 com valor
+  desconhecido e **não** é passada ao build — o número padrão vale.
+- Validado com build igual ao do CI (variáveis vazias): 19 links no HTML
+  exportado, todos para `wa.me/559193754555`; cliques reais (375/1440) no
+  botão flutuante e no formulário de contato abrem o WhatsApp com o texto.
+
 ## Formulário de pré-agendamento (2026-10-07, branch `redesign/portfolio`)
 O chat antigo da home virou **pré-agendamento**: o termo anterior vai contra as
 normas aplicáveis à clínica. Rota `/pre-agendamento` (noindex, fora do
