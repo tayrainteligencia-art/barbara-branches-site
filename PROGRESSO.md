@@ -30,6 +30,76 @@ mesmo sem conseguir confirmar no dispositivo real:
   `Sticky Scroll Reveal` da seção Diferenciais (pin via GSAP ScrollTrigger,
   categoria de animação historicamente pesada no iOS).
 
+## Formulário de pré-agendamento (2026-10-07, branch `redesign/portfolio`)
+O chat antigo da home virou **pré-agendamento**: o termo anterior vai contra as
+normas aplicáveis à clínica. Rota `/pre-agendamento` (noindex, fora do
+sitemap), componente `pre-agendamento-chat.tsx`, CTA do hero "Solicitar
+pré-agendamento". A URL antiga redireciona com 301 no `public/.htaccess`, com e
+sem barra e `.html`, num único salto direto para https.
+- Perguntas: nome → telefone/WhatsApp → CPF → disponibilidade (dias Seg–Sáb +
+  turnos manhã/tarde). Procedimento fixo "Avaliação". Saíram interesse,
+  objetivo, já realizou, tempo, prazo, cidade e o ramo de alerta por
+  palavras-chave.
+- Validações em `src/lib/validacao-agendamento.ts` (funções puras): nome e
+  sobrenome sem dígitos (3–80); telefone com DDD 11–99, celular com 9, fixo
+  começando com 2–5, aceita +55; CPF com máscara, dígitos verificadores e
+  recusa de sequência repetida; disponibilidade com ≥1 dia e ≥1 turno. Testes:
+  `npm run test:validacao` (node:test, sem dependência nova; CPFs fictícios
+  gerados pelo algoritmo).
+- Resumo com "Editar" por campo (exceto procedimento), Voltar/Recomeçar sem
+  recarregar, aviso de uso de nome/telefone/CPF com link para a política e
+  consentimento obrigatório.
+- **Envio**: abre `wa.me/559193754555?text=…` já com a mensagem preenchida
+  (sem copiar/colar). O link `wa.me/message/QDEZWMLPXOTUL1` descarta `?text=`.
+  O número foi obtido da própria página do WhatsApp para esse link (formato
+  sem o nono dígito, como a conta foi registrada) — **confirmar com a clínica**.
+  Por consequência, nome, telefone e CPF trafegam na URL do WhatsApp (decisão
+  do cliente; citar na revisão jurídica da política). O botão flutuante, os CTAs
+  e o formulário de contato continuam no link de mensagem antigo.
+- Dados pessoais só no estado do React: nada em storage, cookies, URL do site,
+  console ou atributos do DOM (o link do WhatsApp é montado no clique).
+- Validado: lint (só o aviso antigo em `parallax-hero-images.tsx`), `tsc`,
+  build de export (`out/.htaccess` com o redirect + regras de HTTPS/HSTS),
+  testes unitários 12/12, `check.mjs`/`visual-check.mjs` e E2E com Playwright
+  (fluxo, erros com `role="alert"`/`aria-describedby`/foco, Editar, Voltar,
+  Recomeçar, bloqueio sem consentimento, URL do WhatsApp com a mensagem exata)
+  em 375/768/1440, claro/escuro e reduced-motion. Aprovado visualmente pelo
+  cliente no `npm run dev`.
+- **Pendentes de decisão** (não alterados):
+  - política de privacidade ainda usa o termo antigo e descreve os campos
+    antigos (ver PENDENCIAS.md);
+  - registros antigos deste arquivo mantêm o termo antigo como histórico;
+  - sábado incluído nos dias, a confirmar com o horário de funcionamento;
+  - o export gera `rota.html` + pasta `rota/` sem `index.html`; no Apache,
+    acesso direto/F5 em `/pre-agendamento` e `/politica-de-privacidade`
+    provavelmente cai em 301→barra + 403. Testar em produção com
+    `curl -I https://<domínio>/politica-de-privacidade`; correção sugerida via
+    `.htaccess` (`DirectorySlash Off` + servir `.html`).
+- Testar após o deploy:
+  `curl -I http://<domínio>/pre-atendimento` (301 → https://<domínio>/pre-agendamento,
+  um salto), `curl -I https://<domínio>/pre-atendimento/` (301) e
+  `curl -I https://<domínio>/pre-agendamento` (200).
+
+## HSTS conservador + redirect 301 (2026-10-07, branch `redesign/portfolio`)
+O `.htaccess` de 2026-09-24 (já mesclado em `main`, provavelmente já em
+produção) mandava `max-age=31536000; includeSubDomains` e redirect 308.
+Ajustado em `public/.htaccess`:
+- Redirect HTTP→HTTPS agora é **301**.
+- HSTS reduzido para `max-age=300`, sem `includeSubDomains` e sem `preload`.
+  Navegadores que já receberam o header de 1 ano passam a usar 300s na
+  próxima visita via HTTPS.
+- `/.well-known/` fica fora do redirect, para não atrapalhar a validação do
+  AutoSSL: o rsync substitui o `.htaccess` do servidor a cada deploy, então as
+  exceções que o cPanel insere sozinho se perdem.
+- Workflow conferido sem mudanças: `rsync -az --delete out/ …` envia dotfiles
+  (a barra no final inclui arquivos ocultos), e o `--delete` não apaga o
+  `.htaccess` porque ele existe em `out/` e é substituído; `.well-known` está
+  excluído. Sem `middleware.ts` e sem `headers()` no `next.config.ts`.
+- Validado: `npm run build` gera `out/.htaccess` idêntico ao de `public/`.
+- **Pendente (manual)**: confirmar o AutoSSL no cPanel, mesclar em `main`,
+  testar `curl -I http://<domínio>` (esperado 301 → https) e só então subir
+  o HSTS para `max-age=31536000`.
+
 ## HTTPS forçado + HSTS (2026-09-24, branch `redesign/portfolio`)
 Pedido original sugeria `middleware.ts` ou `headers()`/`redirects()` no
 `next.config.ts` como fallback sem acesso à camada de servidor. Nenhum dos
@@ -47,7 +117,7 @@ Apache terminando TLS direto quanto atrás de um proxy que só repassa
   acontece no Apache do servidor, e não tenho acesso a ele nem a um
   ambiente de preview. Só é verificável depois que isso chegar a `main` e
   passar pelo deploy automático (`curl -I http://<domínio>` deve devolver
-  308 com `Location: https://…`, e `curl -sI https://<domínio> | grep
+  308 (hoje 301, ver entrada de 2026-10-07) com `Location: https://…`, e `curl -sI https://<domínio> | grep
   -i strict-transport-security` deve mostrar o header).
 - HSTS sem `preload` de propósito (pedido explicitamente) — reversível.
 

@@ -2,13 +2,24 @@
 # Cobre tanto Apache terminando TLS diretamente (%{HTTPS}) quanto um proxy
 # na frente que só repassa X-Forwarded-Proto — cPanel/Hostgator pode usar
 # qualquer um dos dois dependendo do plano, então checamos os dois.
+# /.well-known/ fica de fora para não atrapalhar a validação do AutoSSL
+# (este arquivo substitui o .htaccess do servidor a cada deploy, então as
+# exceções que o cPanel costuma inserir sozinho não sobrevivem).
 RewriteEngine On
+
+# URL antiga do formulário → /pre-agendamento. Vem antes do redirect de HTTPS
+# e já aponta para https, para ser um único 301 (sem cadeia http→https→nova).
+# Cobre com e sem barra final e o .html gerado pelo export (trailingSlash
+# não está ativo no next.config.ts). A query string é preservada.
+RewriteRule ^pre-atendimento(?:/|\.html)?$ https://%{HTTP_HOST}/pre-agendamento [L,R=301]
+
+RewriteCond %{REQUEST_URI} !^/\.well-known/
 RewriteCond %{HTTPS} !=on
 RewriteCond %{HTTP:X-Forwarded-Proto} !=https
-RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=308]
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-# HSTS: max-age conservador (1 ano) para começar, sem preload — preload é
-# difícil de reverter depois que o domínio entra na lista dos navegadores.
+# HSTS: começa conservador (5 min), sem includeSubDomains e sem preload.
+# Depois de confirmar http→https em produção, subir para max-age=31536000.
 <IfModule mod_headers.c>
-  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+  Header always set Strict-Transport-Security "max-age=300"
 </IfModule>

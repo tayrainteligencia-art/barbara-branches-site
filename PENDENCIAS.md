@@ -16,13 +16,19 @@ pela clínica antes da publicação. Enquanto isso, o site usa placeholders marc
       seção 4) — hoje o site usa Cinzel como alternativa gratuita
 - [ ] Nome e contato do encarregado de dados (DPO) para a Política de Privacidade
       (`/politica-de-privacidade` — modelo pendente de revisão jurídica)
+- [ ] Política de Privacidade precisa citar a coleta de **nome, telefone e CPF** (e
+      disponibilidade de dias/turnos) no formulário de pré-agendamento
+      (`/pre-agendamento`), com a finalidade de contato para confirmar o horário —
+      revisão jurídica. O texto atual ainda descreve o fluxo antigo (interesse,
+      objetivo, prazo e cidade) e usa o termo antigo do formulário.
 
 ## Contato e localização
 - [x] Endereço: Rua Mauriti, 2159 — Pedreira, Belém - PA, CEP 66087-680 (confirmado
       2026-09-24 via CNPJ/Google Maps; embed já na seção de Contato)
 - [x] Telefone: (91) 3245-3397; WhatsApp: link `wa.me/message/QDEZWMLPXOTUL1`
-      (confirmado 2026-09-24, já em uso no botão flutuante, CTAs e pré-atendimento)
-- [ ] Horário de funcionamento
+      (confirmado 2026-09-24, já em uso no botão flutuante, CTAs e pré-agendamento)
+- [ ] Horário de funcionamento (também usado no pré-agendamento: hoje os dias/turnos
+      não são validados contra o horário — ver TODO em `src/lib/validacao-agendamento.ts`)
 - [ ] Links das redes sociais (Instagram, Facebook etc.)
 - [x] E-mail: atendimento@drabarbarabranches.com.br (confirmado 2026-09-24, exibido no
       rodapé como texto/mailto — caixa ainda não está ativa, não testar envio real)
