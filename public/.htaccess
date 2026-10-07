@@ -6,6 +6,13 @@
 # (este arquivo substitui o .htaccess do servidor a cada deploy, então as
 # exceções que o cPanel costuma inserir sozinho não sobrevivem).
 RewriteEngine On
+
+# URL antiga do formulário → /pre-agendamento. Vem antes do redirect de HTTPS
+# e já aponta para https, para ser um único 301 (sem cadeia http→https→nova).
+# Cobre com e sem barra final e o .html gerado pelo export (trailingSlash
+# não está ativo no next.config.ts). A query string é preservada.
+RewriteRule ^pre-atendimento(?:/|\.html)?$ https://%{HTTP_HOST}/pre-agendamento [L,R=301]
+
 RewriteCond %{REQUEST_URI} !^/\.well-known/
 RewriteCond %{HTTPS} !=on
 RewriteCond %{HTTP:X-Forwarded-Proto} !=https
